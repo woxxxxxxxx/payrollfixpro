@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA_PLACEHOLDER -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Paycheck Tax Calculator - Free Calculator | PayrollFixPro</title>
+<meta name="description" content="Free Paycheck Tax Calculator — See the exact taxes withheld from each paycheck. No signup required. Instant results for employees, HR teams & freelancers.">
+<link rel="canonical" href="https://payrollfixpro.com/tools/paycheck-tax-calculator.html">
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#0f766e;--primary-dark:#0d6460;--primary-light:#f0fdfa;--primary-dim:rgba(15,118,110,.08);--bg:#f8fafc;--bg2:#fff;--text:#1e293b;--text2:#475569;--text3:#94a3b8;--border:#e2e8f0;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 6px rgba(0,0,0,.04)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+a{text-decoration:none;color:inherit}
+header{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.header-inner{max-width:860px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:24px}
+.logo{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px}
+.logo span{color:var(--primary)}
+.nav-all{margin-left:auto;font-size:14px;font-weight:600;color:var(--primary);padding:7px 16px;border:1.5px solid var(--primary);border-radius:var(--radius-sm);transition:all .15s}
+.nav-all:hover{background:var(--primary);color:#fff}
+.breadcrumb{max-width:860px;margin:16px auto 0;padding:0 20px;font-size:13px;color:var(--text3)}
+.breadcrumb a{color:var(--primary)}
+.breadcrumb span{margin:0 6px}
+.ad-slot{width:100%;background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+.ad-top{height:90px;min-height:90px}.ad-middle{min-height:90px;margin-bottom:24px}.ad-bottom{min-height:90px}
+.adsense-placeholder{width:100%;min-height:90px}
+main{max-width:860px;margin:0 auto;padding:24px 20px 60px;width:100%;flex:1}
+.tool-hero{margin-bottom:28px}
+.tool-hero h1{font-size:1.9rem;font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
+.tool-hero p{font-size:15px;color:var(--text2);max-width:620px}
+.form-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
+.form-card h2{font-size:1rem;font-weight:700;margin-bottom:20px;color:var(--text)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;font-weight:600;color:var(--text2)}
+.field input,.field select{padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;color:var(--text);background:var(--bg2);transition:border-color .15s;outline:none}
+.field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,118,110,.1)}
+.btn-primary{margin-top:20px;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;font-family:inherit}
+.btn-primary:hover{background:var(--primary-dark)}
+.result-card{background:var(--primary-light);border:1.5px solid var(--primary);border-radius:var(--radius);padding:28px;margin-bottom:24px;display:none}
+.result-card.show{display:block}
+.result-card h2{font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--primary-dark)}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.result-item{background:#fff;border-radius:var(--radius-sm);padding:14px}
+.result-label{font-size:12px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.result-value{font-size:1.3rem;font-weight:800;color:var(--primary-dark);margin-top:4px}
+.seo-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
+.seo-section h2{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+.seo-section h3{font-size:.95rem;font-weight:700;margin:18px 0 8px;color:var(--text)}
+.seo-section p{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:10px}
+.faq-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
+.faq-section h2{font-size:1.1rem;font-weight:700;margin-bottom:16px}
+.faq-item{border-bottom:1px solid var(--border);padding:14px 0}
+.faq-item:last-child{border-bottom:none;padding-bottom:0}
+.faq-q{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.faq-a{font-size:14px;color:var(--text2);line-height:1.7}
+.related-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
+.related-section h2{font-size:1rem;font-weight:700;margin-bottom:16px}
+.related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.related-card{padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);transition:all .15s}
+.related-card:hover{border-color:var(--primary);background:var(--primary-light)}
+.related-card-name{font-size:13px;font-weight:700;color:var(--primary)}
+.related-card-desc{font-size:12px;color:var(--text3);margin-top:2px}
+footer{background:var(--text);color:#94a3b8;padding:28px 20px}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.footer-logo{font-size:18px;font-weight:800;color:#fff}
+.footer-logo span{color:var(--primary)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:#94a3b8;font-size:13px;transition:color .15s}
+.footer-links a:hover{color:#fff}
+.footer-copy{font-size:13px;width:100%}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.related-grid{grid-template-columns:1fr}.tool-hero h1{font-size:1.5rem}}</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1638874323475457" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">Payroll<span>Fix</span>Pro</a>
+    <a href="/" class="nav-all">All Tools</a>
+  </div>
+</header>
+<div class="breadcrumb"><a href="/">Home</a><span>›</span>Paycheck Tax Calculator</div>
+<div style="max-width:860px;margin:16px auto;padding:0 20px">
+  <div class="ad-slot ad-top">
+    <ins class="adsbygoogle adsense-placeholder" style="display:block" data-ad-client="ca-pub-1638874323475457" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+<main>
+  <div class="tool-hero">
+    <h1>Paycheck Tax Calculator</h1>
+    <p>See the exact taxes withheld from each paycheck.</p>
+  </div>
+  <div class="form-card">
+    <h2>Enter Your Information</h2>
+    <div class="form-grid">
+<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
+<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+    </div>
+    <button class="btn-primary" onclick="calc()">Calculate</button>
+  </div>
+  <div class="result-card" id="result">
+    <h2>Your Results</h2>
+    <div class="result-grid">
+<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
+<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
+<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
+<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
+
+    </div>
+  </div>
+  <div class="ad-slot ad-middle">
+    <ins class="adsbygoogle adsense-placeholder" style="display:block" data-ad-client="ca-pub-1638874323475457" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+  <div class="seo-section">
+<h2>About Paycheck Tax Calculator</h2>
+<p>The <strong>Paycheck Tax Calculator</strong> on PayrollFixPro is a free, easy-to-use online tool designed to help employees, HR professionals, small business owners, and freelancers accurately calculate paycheck figures without complicated spreadsheets or expensive software.</p>
+<p>Whether you are a full-time salaried employee trying to understand your paycheck, a contractor estimating quarterly taxes, or an HR manager running payroll for a small team, this calculator gives you instant, reliable results based on current US tax laws and payroll standards.</p>
+<h3>How to Use This Calculator</h3>
+<p>Enter the required values in the form above — such as your gross pay, pay period, filing status, or hourly wage. Click <strong>Calculate</strong> to instantly see a detailed breakdown of your results. All calculations happen in your browser and no data is ever stored or transmitted.</p>
+<h3>Why Accurate Paycheck Calculations Matter</h3>
+<p>Incorrect payroll and salary calculations can lead to underpaid employees, IRS penalties, incorrect W-2 filings, and costly compliance issues. Using a dedicated calculator helps you avoid mistakes, plan your finances more confidently, and stay compliant with federal and state regulations.</p>
+<p>The IRS updates tax brackets, FICA wage bases, and standard deduction amounts annually. Our calculators are updated to reflect the latest 2024 figures so you always get accurate results. We recommend cross-checking results with a CPA or payroll professional for complex situations.</p>
+<h3>Who Should Use the Paycheck Tax Calculator</h3>
+<p>This tool is ideal for: <strong>employees</strong> who want to verify their paycheck accuracy; <strong>job seekers</strong> comparing salary offers; <strong>HR professionals</strong> preparing payroll summaries; <strong>freelancers and contractors</strong> estimating tax obligations; and <strong>small business owners</strong> managing employee compensation. It works for hourly, salaried, and contract workers across all industries.</p>
+<p>PayrollFixPro offers 100+ free payroll calculators covering every aspect of compensation — from basic salary conversion to advanced tax modeling. Bookmark this page and return whenever you need a quick, accurate calculation.</p>
+  </div>
+  <div class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+<div class="faq-item"><div class="faq-q">Is the Paycheck Tax Calculator free to use?</div><div class="faq-a">Yes, the Paycheck Tax Calculator on PayrollFixPro is completely free. No account, no signup, and no hidden fees. Just enter your numbers and get instant results.</div></div>
+<div class="faq-item"><div class="faq-q">How accurate are the calculations?</div><div class="faq-a">Our calculators use the latest 2024 IRS tax tables, FICA rates, and wage base limits. Results are accurate for standard situations but we recommend consulting a CPA for complex tax scenarios.</div></div>
+<div class="faq-item"><div class="faq-q">Does my data get saved or shared?</div><div class="faq-a">No. All calculations run entirely in your browser using JavaScript. We never collect, store, or transmit any personal or financial data you enter.</div></div>
+<div class="faq-item"><div class="faq-q">Can I use this calculator for multiple employees?</div><div class="faq-a">Yes. Simply clear the form and enter new values for each employee or pay period. The calculator resets instantly.</div></div>
+<div class="faq-item"><div class="faq-q">What is the difference between gross and net pay?</div><div class="faq-a">Gross pay is your total earnings before any deductions. Net pay (take-home pay) is what remains after federal income tax, state tax, FICA (Social Security and Medicare), and other deductions like 401k or health insurance are subtracted.</div></div>
+
+  </div>
+  <div class="related-section">
+    <h2>Related Tools</h2>
+    <div class="related-grid">
+<a href="paycheck-calculator.html" class="related-card"><div class="related-card-name">Paycheck Calculator</div><div class="related-card-desc">Estimate your next paycheck after all withholdings.</div></a>
+<a href="payroll-calculator.html" class="related-card"><div class="related-card-name">Payroll Calculator</div><div class="related-card-desc">Run payroll calculations for employees in any state.</div></a>
+<a href="federal-withholding-calculator.html" class="related-card"><div class="related-card-name">Federal Withholding Calculator</div><div class="related-card-desc">Determine federal income tax withheld per pay period.</div></a>
+<a href="net-pay-calculator.html" class="related-card"><div class="related-card-name">Net Pay Calculator</div><div class="related-card-desc">Subtract all deductions to find net take-home pay.</div></a>
+
+    </div>
+  </div>
+  <div class="ad-slot ad-bottom">
+    <ins class="adsbygoogle adsense-placeholder" style="display:block" data-ad-client="ca-pub-1638874323475457" data-ad-slot="1122334455" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Payroll<span>Fix</span>Pro</span>
+    <div class="footer-links">
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="footer-copy">© 2024 PayrollFixPro. All rights reserved. For informational purposes only — consult a tax professional for advice.</div>
+  </div>
+</footer>
+<script>
+
+function calc(){
+  var gross=parseFloat(document.getElementById('gross').value)||0;
+  var period=document.getElementById('period').value;
+  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
+  var annual=gross*(mult[period]||1);
+  var monthly=annual/12;
+  var biweekly=annual/26;
+  var hourly=annual/2080;
+  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
+  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
+  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
+  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA_PLACEHOLDER -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>PayrollFixPro - Free Payroll &amp; Salary Calculator Tools</title>
+<meta name="description" content="100+ free payroll, salary, and tax calculators for employees, HR teams, and freelancers. No signup required. Instant results.">
+<link rel="canonical" href="https://payrollfixpro.com/">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#0f766e;--primary-dark:#0d6460;--primary-light:#f0fdfa;--primary-dim:rgba(15,118,110,.08);--bg:#f8fafc;--bg2:#fff;--text:#1e293b;--text2:#475569;--text3:#94a3b8;--border:#e2e8f0;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 6px rgba(0,0,0,.04)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+a{text-decoration:none;color:inherit}
+header{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:32px}
+.logo{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px}
+.logo span{color:var(--primary)}
+.search-wrap{flex:1;max-width:360px;margin-left:auto;position:relative}
+.search-wrap input{width:100%;padding:8px 16px 8px 38px;border:1.5px solid var(--border);border-radius:20px;font-size:14px;outline:none;transition:border-color .15s}
+.search-wrap input:focus{border-color:var(--primary)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round}
+.hero{background:linear-gradient(135deg,#134e4a,#0f766e 60%,#14b8a6);color:#fff;padding:64px 20px;text-align:center}
+.hero h1{font-size:2.5rem;font-weight:800;letter-spacing:-.5px;margin-bottom:12px}
+.hero p{font-size:1.05rem;opacity:.88;max-width:560px;margin:0 auto 28px}
+.stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:1.8rem;font-weight:800}
+.stat-label{font-size:13px;opacity:.8}
+.ad-slot{width:100%;background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+.ad-top{height:90px;margin:24px 0 0}
+.adsense-placeholder{width:100%;min-height:90px}
+main{flex:1;max-width:1100px;margin:0 auto;padding:32px 20px 60px;width:100%}
+.section-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.section-title{font-size:1.2rem;font-weight:700}
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.cat-tab{padding:7px 18px;border-radius:20px;font-size:13px;font-weight:600;color:var(--text2);background:var(--bg2);border:1.5px solid var(--border);cursor:pointer;transition:all .15s}
+.cat-tab.active,.cat-tab:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:32px}
+.tool-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:8px;transition:all .2s;cursor:pointer}
+.tool-card:hover{border-color:var(--primary);box-shadow:0 4px 16px rgba(15,118,110,.1);transform:translateY(-2px)}
+.tool-icon{width:40px;height:40px;background:var(--primary-light);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.tool-icon svg{width:20px;height:20px;stroke:var(--primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tool-name{font-size:14px;font-weight:700;color:var(--text)}
+.tool-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.tool-tag{align-self:flex-start;padding:3px 10px;background:var(--primary-light);color:var(--primary);border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.pagination{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
+.page-btn{padding:7px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg2);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.page-btn.active,.page-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.page-btn:disabled{opacity:.4;cursor:default}
+.about{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:36px;margin-top:40px;box-shadow:var(--shadow)}
+.about h2{font-size:1.2rem;font-weight:700;margin-bottom:12px}
+.about p{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:10px}
+.about p:last-child{margin-bottom:0}
+footer{background:var(--text);color:#94a3b8;padding:32px 20px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.footer-logo{font-size:18px;font-weight:800;color:#fff}
+.footer-logo span{color:var(--primary)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:#94a3b8;font-size:13px;transition:color .15s}
+.footer-links a:hover{color:#fff}
+.footer-copy{font-size:13px;width:100%}
+#btt{position:fixed;bottom:28px;right:28px;width:42px;height:42px;background:var(--primary);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;display:none;z-index:999;box-shadow:0 2px 8px rgba(15,118,110,.35)}
+@media(max-width:640px){
+  .hero h1{font-size:1.8rem}
+  .header-inner{gap:12px}
+  .tool-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1638874323475457" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">Payroll<span>Fix</span>Pro</a>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      <input type="text" id="search" placeholder="Search calculators..." oninput="renderTools()">
+    </div>
+  </div>
+</header>
+<div class="hero">
+  <h1>Free Payroll &amp; Salary Calculator Tools</h1>
+  <p>100+ free calculators for paycheck, salary, tax, PTO, freelance rates, and more. No signup required.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">100+</div><div class="stat-label">Free Tools</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Signups Needed</div></div>
+    <div class="stat"><div class="stat-num">2024</div><div class="stat-label">Tax Year Data</div></div>
+  </div>
+</div>
+<main>
+  <div style="margin-bottom:24px">
+    <div class="ad-slot ad-top">
+      <ins class="adsbygoogle adsense-placeholder" style="display:block" data-ad-client="ca-pub-1638874323475457" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active" data-cat="all" onclick="setCat('all')">All Tools</button>
+    <button class="cat-tab" data-cat="salary" onclick="setCat('salary')">Salary</button>
+    <button class="cat-tab" data-cat="tax" onclick="setCat('tax')">Tax</button>
+    <button class="cat-tab" data-cat="paycheck" onclick="setCat('paycheck')">Paycheck</button>
+    <button class="cat-tab" data-cat="hr" onclick="setCat('hr')">HR &amp; Leave</button>
+    <button class="cat-tab" data-cat="freelance" onclick="setCat('freelance')">Freelance</button>
+  </div>
+  <div class="tool-grid" id="toolGrid"></div>
+  <div class="pagination" id="pagination"></div>
+  <div class="about">
+    <h2>About PayrollFixPro</h2>
+    <p>PayrollFixPro is a free online resource offering 100+ payroll, salary, and tax calculators for employees, HR professionals, small business owners, and freelancers across the United States. Every tool is updated for the 2024 tax year and requires no account or signup.</p>
+    <p>Our calculators cover everything from basic salary conversion and paycheck estimation to advanced topics like quarterly estimated taxes, RSU vesting, 401k projections, and international salary comparisons. All calculations run entirely in your browser — your data is never stored or transmitted.</p>
+    <p>Whether you're negotiating a job offer, running small business payroll, or planning for retirement, PayrollFixPro has a free tool to help. Bookmark us and return whenever you need a quick, accurate calculation.</p>
+  </div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Payroll<span>Fix</span>Pro</span>
+    <div class="footer-links">
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="footer-copy">© 2024 PayrollFixPro. Free payroll calculators for everyone. For informational purposes only.</div>
+  </div>
+</footer>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+<script>
+const TOOLS=[{"slug": "salary-calculator", "name": "Salary Calculator", "cat": "salary", "desc": "Calculate your annual, monthly, and hourly salary instantly."}, {"slug": "hourly-to-salary", "name": "Hourly to Salary Converter", "cat": "salary", "desc": "Convert hourly wage to annual salary in seconds."}, {"slug": "salary-to-hourly", "name": "Salary to Hourly Converter", "cat": "salary", "desc": "Convert annual salary to hourly, daily, or weekly pay."}, {"slug": "annual-salary-calculator", "name": "Annual Salary Calculator", "cat": "salary", "desc": "Figure out your total annual compensation with bonuses."}, {"slug": "monthly-salary-calculator", "name": "Monthly Salary Calculator", "cat": "salary", "desc": "Break down your annual pay into monthly earnings."}, {"slug": "weekly-pay-calculator", "name": "Weekly Pay Calculator", "cat": "salary", "desc": "Calculate weekly gross pay from any pay period."}, {"slug": "biweekly-pay-calculator", "name": "Biweekly Pay Calculator", "cat": "salary", "desc": "Estimate biweekly paycheck gross and net amounts."}, {"slug": "salary-increase-calculator", "name": "Salary Increase Calculator", "cat": "salary", "desc": "Find out exactly how much a raise adds to your income."}, {"slug": "salary-negotiation-calculator", "name": "Salary Negotiation Calculator", "cat": "salary", "desc": "Model different salary offers and their long-term value."}, {"slug": "cost-of-living-calculator", "name": "Cost of Living Calculator", "cat": "salary", "desc": "Compare purchasing power between cities and states."}, {"slug": "take-home-pay-calculator", "name": "Take Home Pay Calculator", "cat": "salary", "desc": "See how much of your gross pay you actually keep."}, {"slug": "net-salary-calculator", "name": "Net Salary Calculator", "cat": "salary", "desc": "Compute net salary after all taxes and deductions."}, {"slug": "gross-salary-calculator", "name": "Gross Salary Calculator", "cat": "salary", "desc": "Work backwards from net pay to find gross salary."}, {"slug": "salary-comparison-calculator", "name": "Salary Comparison Calculator", "cat": "salary", "desc": "Side-by-side comparison of two salary offers."}, {"slug": "executive-compensation-calculator", "name": "Executive Compensation Calculator", "cat": "salary", "desc": "Model total executive pay including equity and bonuses."}, {"slug": "paycheck-calculator", "name": "Paycheck Calculator", "cat": "paycheck", "desc": "Estimate your next paycheck after all withholdings."}, {"slug": "payroll-calculator", "name": "Payroll Calculator", "cat": "paycheck", "desc": "Run payroll calculations for employees in any state."}, {"slug": "payroll-tax-calculator", "name": "Payroll Tax Calculator", "cat": "paycheck", "desc": "Calculate employer and employee payroll tax obligations."}, {"slug": "paycheck-tax-calculator", "name": "Paycheck Tax Calculator", "cat": "paycheck", "desc": "See the exact taxes withheld from each paycheck."}, {"slug": "federal-withholding-calculator", "name": "Federal Withholding Calculator", "cat": "paycheck", "desc": "Determine federal income tax withheld per pay period."}, {"slug": "state-tax-calculator", "name": "State Tax Calculator", "cat": "paycheck", "desc": "Estimate state income tax for all 50 US states."}, {"slug": "fica-tax-calculator", "name": "FICA Tax Calculator", "cat": "paycheck", "desc": "Calculate Social Security and Medicare FICA taxes."}, {"slug": "social-security-tax-calculator", "name": "Social Security Tax Calculator", "cat": "paycheck", "desc": "Find your Social Security tax contribution and limits."}, {"slug": "medicare-tax-calculator", "name": "Medicare Tax Calculator", "cat": "paycheck", "desc": "Compute Medicare tax including Additional Medicare Tax."}, {"slug": "net-pay-calculator", "name": "Net Pay Calculator", "cat": "paycheck", "desc": "Subtract all deductions to find net take-home pay."}, {"slug": "direct-deposit-calculator", "name": "Direct Deposit Calculator", "cat": "paycheck", "desc": "Split your paycheck across multiple bank accounts."}, {"slug": "payroll-deduction-calculator", "name": "Payroll Deduction Calculator", "cat": "paycheck", "desc": "Calculate 401k, health, and other pre-tax deductions."}, {"slug": "paycheck-estimator", "name": "Paycheck Estimator", "cat": "paycheck", "desc": "Quick estimate of your next paycheck amount."}, {"slug": "w4-calculator", "name": "W-4 Withholding Calculator", "cat": "paycheck", "desc": "Optimize your W-4 to avoid over- or under-withholding."}, {"slug": "1099-tax-calculator", "name": "1099 Tax Calculator", "cat": "paycheck", "desc": "Calculate taxes owed as an independent contractor."}, {"slug": "income-tax-calculator", "name": "Income Tax Calculator", "cat": "tax", "desc": "Estimate federal income tax for any filing status."}, {"slug": "self-employment-tax-calculator", "name": "Self Employment Tax Calculator", "cat": "tax", "desc": "Calculate SE tax and deductions for self-employed workers."}, {"slug": "quarterly-tax-calculator", "name": "Quarterly Tax Calculator", "cat": "tax", "desc": "Estimate quarterly estimated tax payments."}, {"slug": "tax-refund-calculator", "name": "Tax Refund Calculator", "cat": "tax", "desc": "Predict your federal tax refund or amount owed."}, {"slug": "tax-bracket-calculator", "name": "Tax Bracket Calculator", "cat": "tax", "desc": "Find which federal tax brackets apply to your income."}, {"slug": "effective-tax-rate-calculator", "name": "Effective Tax Rate Calculator", "cat": "tax", "desc": "Calculate your real overall effective tax rate."}, {"slug": "marginal-tax-rate-calculator", "name": "Marginal Tax Rate Calculator", "cat": "tax", "desc": "Find the tax rate on your next dollar of income."}, {"slug": "capital-gains-tax-calculator", "name": "Capital Gains Tax Calculator", "cat": "tax", "desc": "Estimate short- and long-term capital gains taxes."}, {"slug": "tax-withholding-calculator", "name": "Tax Withholding Calculator", "cat": "tax", "desc": "Check if you're withholding the right amount of tax."}, {"slug": "estimated-tax-calculator", "name": "Estimated Tax Calculator", "cat": "tax", "desc": "Plan quarterly estimated tax payments accurately."}, {"slug": "bonus-tax-calculator", "name": "Bonus Tax Calculator", "cat": "tax", "desc": "See how much of your bonus goes to taxes."}, {"slug": "severance-tax-calculator", "name": "Severance Tax Calculator", "cat": "tax", "desc": "Calculate taxes on severance pay and termination packages."}, {"slug": "stock-options-tax-calculator", "name": "Stock Options Tax Calculator", "cat": "tax", "desc": "Estimate taxes on ISO and NSO stock option exercises."}, {"slug": "rsu-tax-calculator", "name": "RSU Tax Calculator", "cat": "tax", "desc": "Calculate tax on vested RSUs and supplemental income."}, {"slug": "w2-calculator", "name": "W-2 Calculator", "cat": "tax", "desc": "Verify your W-2 numbers and simulate refund outcomes."}, {"slug": "pto-calculator", "name": "PTO Calculator", "cat": "hr", "desc": "Track and calculate paid time off accrual and balances."}, {"slug": "vacation-pay-calculator", "name": "Vacation Pay Calculator", "cat": "hr", "desc": "Calculate vacation payout based on hourly or salary rate."}, {"slug": "sick-leave-calculator", "name": "Sick Leave Calculator", "cat": "hr", "desc": "Estimate sick leave accrual and payout value."}, {"slug": "overtime-calculator", "name": "Overtime Pay Calculator", "cat": "hr", "desc": "Calculate time-and-a-half or double-time overtime pay."}, {"slug": "holiday-pay-calculator", "name": "Holiday Pay Calculator", "cat": "hr", "desc": "Determine holiday pay for salaried and hourly employees."}, {"slug": "maternity-leave-calculator", "name": "Maternity Leave Calculator", "cat": "hr", "desc": "Plan paid and unpaid maternity leave compensation."}, {"slug": "fmla-calculator", "name": "FMLA Leave Calculator", "cat": "hr", "desc": "Calculate FMLA leave eligibility and duration."}, {"slug": "employee-benefits-calculator", "name": "Employee Benefits Calculator", "cat": "hr", "desc": "Quantify the total value of your employee benefits package."}, {"slug": "workers-comp-calculator", "name": "Workers Comp Calculator", "cat": "hr", "desc": "Estimate workers compensation premiums and benefits."}, {"slug": "unemployment-calculator", "name": "Unemployment Benefits Calculator", "cat": "hr", "desc": "Estimate weekly unemployment insurance benefit amounts."}, {"slug": "severance-pay-calculator", "name": "Severance Pay Calculator", "cat": "hr", "desc": "Calculate severance pay based on tenure and salary."}, {"slug": "raise-calculator", "name": "Pay Raise Calculator", "cat": "hr", "desc": "See how a percentage raise changes your take-home pay."}, {"slug": "promotion-salary-calculator", "name": "Promotion Salary Calculator", "cat": "hr", "desc": "Model salary changes from a job promotion."}, {"slug": "headcount-cost-calculator", "name": "Headcount Cost Calculator", "cat": "hr", "desc": "Estimate the total annual cost of adding a new employee."}, {"slug": "employee-cost-calculator", "name": "Employee Total Cost Calculator", "cat": "hr", "desc": "Calculate fully-loaded employee cost including all overhead."}, {"slug": "freelance-rate-calculator", "name": "Freelance Rate Calculator", "cat": "freelance", "desc": "Set your freelance hourly or project rate with confidence."}, {"slug": "contractor-pay-calculator", "name": "Contractor Pay Calculator", "cat": "freelance", "desc": "Estimate net pay as a 1099 contractor after taxes."}, {"slug": "consulting-fee-calculator", "name": "Consulting Fee Calculator", "cat": "freelance", "desc": "Calculate consulting project fees and retainer rates."}, {"slug": "project-rate-calculator", "name": "Project Rate Calculator", "cat": "freelance", "desc": "Determine a fair project flat-rate for your work."}, {"slug": "billable-hours-calculator", "name": "Billable Hours Calculator", "cat": "freelance", "desc": "Track and value billable hours for client invoicing."}, {"slug": "freelance-tax-calculator", "name": "Freelance Tax Calculator", "cat": "freelance", "desc": "Estimate quarterly and annual taxes for freelancers."}, {"slug": "self-employed-salary-calculator", "name": "Self Employed Salary Calculator", "cat": "freelance", "desc": "Calculate a reasonable salary to pay yourself as self-employed."}, {"slug": "gig-income-calculator", "name": "Gig Income Calculator", "cat": "freelance", "desc": "Estimate earnings and taxes for gig economy work."}, {"slug": "side-hustle-tax-calculator", "name": "Side Hustle Tax Calculator", "cat": "freelance", "desc": "Calculate taxes on side hustle and extra income."}, {"slug": "independent-contractor-calculator", "name": "Independent Contractor Calculator", "cat": "freelance", "desc": "Compare contractor pay to W-2 equivalent salary."}, {"slug": "401k-calculator", "name": "401k Calculator", "cat": "hr", "desc": "Project 401k balance and employer match over time."}, {"slug": "retirement-savings-calculator", "name": "Retirement Savings Calculator", "cat": "hr", "desc": "Model retirement savings growth with different contributions."}, {"slug": "pension-calculator", "name": "Pension Calculator", "cat": "hr", "desc": "Estimate defined benefit pension monthly payment."}, {"slug": "social-security-calculator", "name": "Social Security Benefits Calculator", "cat": "hr", "desc": "Estimate Social Security retirement benefits."}, {"slug": "roth-ira-calculator", "name": "Roth IRA Calculator", "cat": "hr", "desc": "Project Roth IRA growth and tax-free retirement income."}, {"slug": "teacher-salary-calculator", "name": "Teacher Salary Calculator", "cat": "salary", "desc": "Estimate teacher salary by state, step, and experience."}, {"slug": "nurse-salary-calculator", "name": "Nurse Salary Calculator", "cat": "salary", "desc": "Calculate nursing salary with differentials and overtime."}, {"slug": "software-engineer-salary", "name": "Software Engineer Salary Calculator", "cat": "salary", "desc": "Benchmark software engineer compensation by level and location."}, {"slug": "manager-salary-calculator", "name": "Manager Salary Calculator", "cat": "salary", "desc": "Model manager total comp including bonus and equity."}, {"slug": "part-time-salary-calculator", "name": "Part Time Salary Calculator", "cat": "salary", "desc": "Prorate full-time salary for part-time hours."}, {"slug": "payroll-tax-form", "name": "Payroll Tax Form Generator", "cat": "paycheck", "desc": "Generate a payroll tax summary form for record keeping."}, {"slug": "pay-stub-generator", "name": "Pay Stub Generator", "cat": "paycheck", "desc": "Create a professional pay stub for any pay period."}, {"slug": "payroll-register", "name": "Payroll Register Template", "cat": "paycheck", "desc": "Build a complete payroll register with totals."}, {"slug": "employee-timesheet", "name": "Employee Timesheet Calculator", "cat": "hr", "desc": "Calculate hours worked and pay from a timesheet."}, {"slug": "time-card-calculator", "name": "Time Card Calculator", "cat": "hr", "desc": "Punch in/out time card with overtime detection."}, {"slug": "hours-worked-calculator", "name": "Hours Worked Calculator", "cat": "hr", "desc": "Calculate total hours worked in a day or week."}, {"slug": "shift-differential-calculator", "name": "Shift Differential Calculator", "cat": "hr", "desc": "Add night or weekend shift differential to base pay."}, {"slug": "commission-calculator", "name": "Commission Pay Calculator", "cat": "freelance", "desc": "Calculate sales commission and total earnings."}, {"slug": "tip-calculator", "name": "Tip Income Calculator", "cat": "freelance", "desc": "Estimate annual income from tips and service charges."}, {"slug": "mileage-reimbursement-calculator", "name": "Mileage Reimbursement Calculator", "cat": "hr", "desc": "Calculate IRS standard mileage reimbursement amounts."}, {"slug": "uk-salary-calculator", "name": "UK Salary Calculator", "cat": "salary", "desc": "Estimate UK take-home pay after income tax and NI."}, {"slug": "canada-salary-calculator", "name": "Canada Salary Calculator", "cat": "salary", "desc": "Calculate Canadian net salary after federal and provincial tax."}, {"slug": "australia-salary-calculator", "name": "Australia Salary Calculator", "cat": "salary", "desc": "Estimate Australian net pay after income tax and Medicare."}, {"slug": "india-salary-calculator", "name": "India Salary Calculator", "cat": "salary", "desc": "Calculate Indian net salary after income tax and PF."}, {"slug": "singapore-salary-calculator", "name": "Singapore Salary Calculator", "cat": "salary", "desc": "Estimate Singapore take-home pay after CPF and taxes."}, {"slug": "living-wage-calculator", "name": "Living Wage Calculator", "cat": "salary", "desc": "Find the living wage needed in your city or county."}, {"slug": "minimum-wage-calculator", "name": "Minimum Wage Calculator", "cat": "salary", "desc": "Compare federal and state minimum wage earnings."}, {"slug": "wage-garnishment-calculator", "name": "Wage Garnishment Calculator", "cat": "paycheck", "desc": "Calculate disposable earnings and garnishment limits."}, {"slug": "back-pay-calculator", "name": "Back Pay Calculator", "cat": "paycheck", "desc": "Estimate back pay owed for wages not paid on time."}, {"slug": "payroll-cost-calculator", "name": "Total Payroll Cost Calculator", "cat": "paycheck", "desc": "Calculate total payroll cost including employer taxes and benefits."}];
+const PAGE_SIZE=24;
+let currentCat='all',currentPage=1;
+const ICONS={
+  salary:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+  tax:'<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/>',
+  paycheck:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  hr:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  freelance:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+};
+function setCat(cat){
+  currentCat=cat;currentPage=1;
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.toggle('active',t.dataset.cat===cat));
+  renderTools();
+}
+function renderTools(){
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  const filtered=TOOLS.filter(t=>(currentCat==='all'||t.cat===currentCat)&&(!q||t.name.toLowerCase().includes(q)||t.desc.toLowerCase().includes(q)));
+  const total=Math.ceil(filtered.length/PAGE_SIZE);
+  if(currentPage>total)currentPage=1;
+  const slice=filtered.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
+  const grid=document.getElementById('toolGrid');
+  grid.innerHTML=slice.map(t=>`<a href="/tools/${t.slug}.html" class="tool-card">
+    <div class="tool-icon"><svg viewBox="0 0 24 24">${ICONS[t.cat]||ICONS.salary}</svg></div>
+    <div class="tool-name">${t.name}</div>
+    <div class="tool-desc">${t.desc}</div>
+    <div class="tool-tag">${t.cat}</div>
+  </a>`).join('');
+  const pag=document.getElementById('pagination');
+  if(total<=1){pag.innerHTML='';return;}
+  let html=`<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for(let i=1;i<=total;i++) html+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  html+=`<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}>›</button>`;
+  pag.innerHTML=html;
+}
+function goPage(p){currentPage=p;renderTools();window.scrollTo({top:0,behavior:'smooth'});}
+renderTools();
+window.addEventListener('scroll',()=>{document.getElementById('btt').style.display=window.scrollY>400?'flex':'none';});
+</script>
+</body>
+</html>
