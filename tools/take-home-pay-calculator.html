@@ -94,21 +94,93 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>See how much of your gross pay you actually keep.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Enter Your Details</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+      <div class="field">
+        <label>Annual Gross Salary ($)</label>
+        <input id="salary" type="number" value="65000" step="1000" min="0">
+      </div>
+      <div class="field">
+        <label>Filing Status</label>
+        <select id="filing">
+          <option value="single">Single</option>
+          <option value="mfj">Married Filing Jointly</option>
+          <option value="mfs">Married Filing Separately</option>
+          <option value="hoh">Head of Household</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>State</label>
+        <select id="state">
+          <option value="0">No State Tax (TX/FL/WA/NV…)</option>
+          <option value="AZ">Arizona (2.50%)</option>
+          <option value="CA">California (~9.30%)</option>
+          <option value="CO">Colorado (4.40%)</option>
+          <option value="GA">Georgia (5.49%)</option>
+          <option value="IL">Illinois (4.95%)</option>
+          <option value="IN">Indiana (3.15%)</option>
+          <option value="MA">Massachusetts (5.00%)</option>
+          <option value="MD">Maryland (5.00%)</option>
+          <option value="MI">Michigan (4.05%)</option>
+          <option value="NJ">New Jersey (6.37%)</option>
+          <option value="NC">North Carolina (4.75%)</option>
+          <option value="NY">New York (~6.25%)</option>
+          <option value="OH">Ohio (~3.50%)</option>
+          <option value="PA">Pennsylvania (3.07%)</option>
+          <option value="UT">Utah (4.55%)</option>
+          <option value="VA">Virginia (5.75%)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>401(k) Contribution (%)</label>
+        <input id="k401" type="number" value="5" step="0.5" min="0" max="23">
+      </div>
+      <div class="field">
+        <label>Health Insurance Pre-tax ($/mo)</label>
+        <input id="health" type="number" value="0" step="10" min="0">
+      </div>
+      <div class="field">
+        <label>Hours per Week (for hourly rate)</label>
+        <input id="hours" type="number" value="40" step="1" min="1" max="80">
+      </div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Take-Home Pay</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Your Take-Home Pay</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+      <div class="result-item" style="background:var(--primary);border-color:var(--primary)">
+        <div class="result-label" style="color:rgba(255,255,255,.8)">Annual Take-Home</div>
+        <div class="result-value" style="color:#fff" id="r-annual">—</div>
+      </div>
+      <div class="result-item" style="background:var(--primary-light);border-color:var(--primary)">
+        <div class="result-label">Monthly Take-Home</div>
+        <div class="result-value" id="r-monthly">—</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Biweekly Take-Home</div>
+        <div class="result-value" id="r-biweekly">—</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Weekly Take-Home</div>
+        <div class="result-value" id="r-weekly">—</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Daily Take-Home</div>
+        <div class="result-value" id="r-daily">—</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Hourly Take-Home</div>
+        <div class="result-value" id="r-hourly">—</div>
+      </div>
+    </div>
+    <div style="margin-top:18px;padding:14px;background:rgba(15,118,110,.06);border-radius:8px;font-size:13px;color:var(--text2);line-height:2">
+      <strong>Deductions from $<span id="d-gross">—</span> gross:</strong>
+      Federal <span id="d-fed">—</span> &nbsp;|&nbsp;
+      SS + Medicare <span id="d-fica">—</span> &nbsp;|&nbsp;
+      State <span id="d-state">—</span> &nbsp;|&nbsp;
+      401(k)/Benefits <span id="d-pretax">—</span> &nbsp;|&nbsp;
+      <strong>Take-Home Rate <span id="d-rate">—</span></strong>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -163,18 +235,88 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 </footer>
 <script>
 
+// 2026 Federal Tax Brackets + Standard Deductions
+function calcFedTax(annualIncome, status) {
+  const std = {single:15000, mfj:30000, mfs:15000, hoh:22500};
+  const brackets = {
+    single: [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+    mfj:    [[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+    mfs:    [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[375800,.35],[Infinity,.37]],
+    hoh:    [[17000,.10],[64300,.12],[103350,.22],[197300,.24],[250500,.32],[626350,.35],[Infinity,.37]]
+  };
+  const taxable = Math.max(0, annualIncome - (std[status]||15000));
+  const b = brackets[status] || brackets.single;
+  let tax = 0, prev = 0;
+  for (let i=0;i<b.length;i++){
+    const [upper, rate] = b[i];
+    if (taxable <= prev) break;
+    tax += (Math.min(taxable, upper) - prev) * rate;
+    prev = upper;
+  }
+  return Math.max(0, tax);
+}
+
+// State tax rates (2026 approximate)
+const STATE_RATES = {
+  "0":    {label:"No State Tax (TX/FL/WA/NV/SD/WY/AK)", rate:0},
+  "IL":   {label:"Illinois",          rate:0.0495},
+  "PA":   {label:"Pennsylvania",      rate:0.0307},
+  "IN":   {label:"Indiana",           rate:0.0315},
+  "MI":   {label:"Michigan",          rate:0.0405},
+  "CO":   {label:"Colorado",          rate:0.0440},
+  "UT":   {label:"Utah",              rate:0.0455},
+  "AZ":   {label:"Arizona",           rate:0.0250},
+  "MA":   {label:"Massachusetts",     rate:0.0500},
+  "NC":   {label:"North Carolina",    rate:0.0475},
+  "GA":   {label:"Georgia",           rate:0.0549},
+  "VA":   {label:"Virginia",          rate:0.0575},
+  "MD":   {label:"Maryland (state)",  rate:0.0500},
+  "OH":   {label:"Ohio",              rate:0.0350},
+  "NJ":   {label:"New Jersey",        rate:0.0637},
+  "NY":   {label:"New York (~mid)",   rate:0.0625},
+  "CA":   {label:"California (~mid)", rate:0.0930},
+};
+
+function fmt(n){ return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function pct(n){ return (n*100).toFixed(2)+'%'; }
+function set(id,v){ const e=document.getElementById(id); if(e) e.textContent=v; }
+
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary  = parseFloat(document.getElementById('salary').value)  || 0;
+  const status  = document.getElementById('filing').value;
+  const stKey   = document.getElementById('state').value;
+  const stRate  = (STATE_RATES[stKey] || {rate:0}).rate;
+  const k401pct = Math.min(23, parseFloat(document.getElementById('k401').value)||0) / 100;
+  const healthMo= parseFloat(document.getElementById('health').value)  || 0;
+  const hours   = parseFloat(document.getElementById('hours').value)   || 40;
+
+  const annHealth = healthMo * 12;
+  const ann401k   = salary * k401pct;
+  const annPreTax = ann401k + annHealth;
+  const annTaxable= Math.max(0, salary - annPreTax);
+
+  const annFed  = calcFedTax(annTaxable, status);
+  const ssCap   = 176100;
+  const annSS   = Math.min(salary, ssCap) * 0.062;
+  const annMed  = salary * 0.0145 + (salary > 200000 ? (salary - 200000) * 0.009 : 0);
+  const annState= annTaxable * stRate;
+  const annNet  = salary - annFed - annSS - annMed - annState - annPreTax;
+  const annHours= hours * 52;
+
+  set('r-annual',   fmt(annNet));
+  set('r-monthly',  fmt(annNet / 12));
+  set('r-biweekly', fmt(annNet / 26));
+  set('r-weekly',   fmt(annNet / 52));
+  set('r-daily',    fmt(annNet / 260));
+  set('r-hourly',   fmt(annNet / annHours));
+
+  set('d-gross',  salary.toLocaleString('en-US',{maximumFractionDigits:0}));
+  set('d-fed',    fmt(annFed));
+  set('d-fica',   fmt(annSS + annMed));
+  set('d-state',  fmt(annState));
+  set('d-pretax', fmt(annPreTax));
+  set('d-rate',   (annNet / salary * 100).toFixed(1) + '%');
+
   document.getElementById('result').classList.add('show');
 }
 </script>
