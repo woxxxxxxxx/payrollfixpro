@@ -96,19 +96,22 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Capital Gain Amount ($)</label><input id="gain" type="number" value="50000" step="1000" min="0"></div>
+<div class="field"><label>Holding Period</label><select id="holding"><option value="long">Long-Term (> 1 year)</option><option value="short">Short-Term (≤ 1 year)</option></select></div>
+<div class="field"><label>Other Ordinary Income ($)</label><input id="otherinc" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Capital Gains Tax</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Capital Gains Tax Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Capital Gain</div><div class="result-value" id="r-gain">—</div></div>
+<div class="result-item"><div class="result-label">Tax Rate Applied</div><div class="result-value" id="r-cg-rate">—</div></div>
+<div class="result-item"><div class="result-label">Capital Gains Tax</div><div class="result-value" id="r-cg-tax" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">NIIT (3.8%) if applicable</div><div class="result-value" id="r-niit" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Total Tax on Gain</div><div class="result-value" id="r-total" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">After-Tax Proceeds</div><div class="result-value" id="r-net">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +165,63 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const gain=parseFloat(document.getElementById('gain').value)||0;
+  const holding=document.getElementById('holding').value;
+  const otherinc=parseFloat(document.getElementById('otherinc').value)||0;
+  const status=document.getElementById('status').value;
+  let cgTax=0,rateLabel='';
+
+  if(holding==='short'){
+    // Short-term: ordinary income rates
+    const std={single:15000,mfj:30000,hoh:22500};
+    const br={
+      single:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+      mfj:   [[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+      hoh:   [[17000,.10],[64300,.12],[103350,.22],[197300,.24],[250500,.32],[626350,.35],[Infinity,.37]]
+    };
+    // marginal rate on the gain portion
+    const taxable1=Math.max(0,otherinc-(std[status]||15000));
+    const taxable2=taxable1+gain;
+    let t1=0,t2=0,prev=0;
+    const b=br[status]||br.single;
+    for(const[u,r]of b){
+      if(taxable1>prev)t1+=(Math.min(taxable1,u)-prev)*r;
+      if(taxable2>prev)t2+=(Math.min(taxable2,u)-prev)*r;
+      prev=u;if(prev===Infinity)break;
+    }
+    cgTax=t2-t1;
+    rateLabel='Ordinary (up to 37%)';
+  } else {
+    // Long-term LTCG rates 2026
+    const ltcg0={single:48350,mfj:96700,hoh:64750};
+    const ltcg15={single:533400,mfj:600050,hoh:566700};
+    const threshold0=ltcg0[status]||48350;
+    const threshold15=ltcg15[status]||533400;
+    const totalInc=otherinc+gain;
+    const rate0Gain=Math.max(0,Math.min(totalInc,threshold0)-otherinc);
+    const rate15Gain=Math.max(0,Math.min(totalInc,threshold15)-Math.max(otherinc,threshold0));
+    const rate20Gain=Math.max(0,gain-rate0Gain-rate15Gain);
+    cgTax=rate15Gain*0.15+rate20Gain*0.20;
+    const effRate=gain>0?cgTax/gain*100:0;
+    rateLabel=effRate.toFixed(1)+'% effective';
+  }
+
+  // NIIT 3.8% on investment income if MAGI > threshold
+  const niitThresh={single:200000,mfj:250000,hoh:200000};
+  const niit=(otherinc+gain)>(niitThresh[status]||200000)?gain*0.038:0;
+  const total=cgTax+niit;
+  const net=gain-total;
+
+  set('r-gain',fmt(gain));
+  set('r-cg-rate',rateLabel);
+  set('r-cg-tax',fmt(cgTax));
+  set('r-niit',niit>0?fmt(niit):'$0 (below threshold)');
+  set('r-total',fmt(total));
+  set('r-net',fmt(net));
   document.getElementById('result').classList.add('show');
 }
 </script>

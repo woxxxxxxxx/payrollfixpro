@@ -96,19 +96,23 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Annual Salary ($)</label><input id="salary" type="number" value="70000" step="1000" min="0"></div>
+<div class="field"><label>Maternity Leave Length (weeks)</label><input id="weeks" type="number" value="12" step="1" min="0" max="52"></div>
+<div class="field"><label>Paid Leave by Employer (weeks)</label><input id="paidwks" type="number" value="6" step="1" min="0"></div>
+<div class="field"><label>Employer Pay Rate During Leave (%)</label><input id="payrate" type="number" value="100" step="5" min="0" max="100"></div>
+<div class="field"><label>State Paid Leave Benefit ($/week)</label><input id="stateamt" type="number" value="0" step="50" min="0" placeholder="0 if no state benefit"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Maternity Pay</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Maternity Leave Pay Breakdown</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Weekly Base Pay</div><div class="result-value" id="r-weekly">—</div></div>
+<div class="result-item"><div class="result-label">Paid Leave Income</div><div class="result-value" id="r-paid">—</div></div>
+<div class="result-item"><div class="result-label">State Benefit (unpaid wks)</div><div class="result-value" id="r-state">—</div></div>
+<div class="result-item"><div class="result-label">Unpaid Gap</div><div class="result-value" id="r-gap" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Total Leave Earnings</div><div class="result-value" id="r-total">—</div></div>
+<div class="result-item"><div class="result-label">Income Replacement Rate</div><div class="result-value" id="r-rate">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +166,28 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const totalWks=parseFloat(document.getElementById('weeks').value)||0;
+  const paidWks=Math.min(parseFloat(document.getElementById('paidwks').value)||0,totalWks);
+  const payRate=(parseFloat(document.getElementById('payrate').value)||0)/100;
+  const stateWkAmt=parseFloat(document.getElementById('stateamt').value)||0;
+  const weekly=salary/52;
+  const paidInc=paidWks*weekly*payRate;
+  const unpaidWks=totalWks-paidWks;
+  const stateTotal=stateWkAmt*unpaidWks;
+  const fullPay=totalWks*weekly;
+  const gap=Math.max(0,fullPay-paidInc-stateTotal);
+  const total=paidInc+stateTotal;
+  const replRate=fullPay>0?total/fullPay*100:0;
+  set('r-weekly',fmt(weekly));
+  set('r-paid',fmt(paidInc));
+  set('r-state',fmt(stateTotal));
+  set('r-gap',fmt(gap));
+  set('r-total',fmt(total));
+  set('r-rate',replRate.toFixed(0)+'%');
   document.getElementById('result').classList.add('show');
 }
 </script>

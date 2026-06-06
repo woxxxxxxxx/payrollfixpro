@@ -94,21 +94,26 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Run payroll calculations for employees in any state.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Enter Payroll Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Employee Gross Salary ($)</label><input id="salary" type="number" value="60000" step="1000" min="0"></div>
+<div class="field"><label>Pay Frequency</label><select id="freq"><option value="26">Biweekly (26/yr)</option><option value="24">Semi-monthly (24/yr)</option><option value="12">Monthly (12/yr)</option><option value="52">Weekly (52/yr)</option></select></div>
+<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
+<div class="field"><label>401(k) Employee Contribution (%)</label><input id="k401" type="number" value="6" step="0.5" min="0" max="100"></div>
+<div class="field"><label>Health Insurance ($/paycheck)</label><input id="health" type="number" value="150" step="10" min="0"></div>
+<div class="field"><label>Number of Employees</label><input id="headcount" type="number" value="1" step="1" min="1"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Run Payroll</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Per-Paycheck Summary</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Gross Per Paycheck</div><div class="result-value" id="r-gross">—</div></div>
+<div class="result-item"><div class="result-label">Federal Withholding</div><div class="result-value" id="r-fed" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">FICA (Employee)</div><div class="result-value" id="r-fica" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Pre-Tax Deductions</div><div class="result-value" id="r-pretax" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Net Paycheck</div><div class="result-value" id="r-net">—</div></div>
+<div class="result-item"><div class="result-label">Annual Payroll Cost (×employees)</div><div class="result-value" id="r-total">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +167,48 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
+function calcFedTax(inc,status){
+  const std={single:15000,mfj:30000,mfs:15000,hoh:22500};
+  const br={
+    single:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+    mfj:   [[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+    mfs:   [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[375800,.35],[Infinity,.37]],
+    hoh:   [[17000,.10],[64300,.12],[103350,.22],[197300,.24],[250500,.32],[626350,.35],[Infinity,.37]]
+  };
+  const taxable=Math.max(0,inc-(std[status]||15000));
+  const b=br[status]||br.single;
+  let tax=0,prev=0;
+  for(let i=0;i<b.length;i++){const[u,r]=b[i];if(taxable<=prev)break;tax+=(Math.min(taxable,u)-prev)*r;prev=u;}
+  return tax;
+}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const freq=parseInt(document.getElementById('freq').value)||26;
+  const status=document.getElementById('status').value;
+  const k401=(parseFloat(document.getElementById('k401').value)||0)/100;
+  const healthPP=parseFloat(document.getElementById('health').value)||0;
+  const headcount=parseFloat(document.getElementById('headcount').value)||1;
+  const ann401k=salary*k401;
+  const annHealth=healthPP*freq;
+  const annPreTax=ann401k+annHealth;
+  const annTaxable=Math.max(0,salary-annPreTax);
+  const annFed=calcFedTax(annTaxable,status);
+  const annSS=Math.min(salary,176100)*0.062;
+  const annMed=salary*0.0145;
+  const ppGross=salary/freq;
+  const ppFed=annFed/freq;
+  const ppFica=(annSS+annMed)/freq;
+  const ppPreTax=annPreTax/freq;
+  const ppNet=ppGross-ppFed-ppFica-ppPreTax;
+  set('r-gross',fmt(ppGross));
+  set('r-fed',fmt(ppFed));
+  set('r-fica',fmt(ppFica));
+  set('r-pretax',fmt(ppPreTax));
+  set('r-net',fmt(ppNet));
+  set('r-total',fmt(salary*headcount));
   document.getElementById('result').classList.add('show');
 }
 </script>

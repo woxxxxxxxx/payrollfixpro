@@ -94,21 +94,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Calculate disposable earnings and garnishment limits.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Wage Garnishment Calculator</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Gross Weekly Pay ($)</label><input id="gross" type="number" value="1000" step="50" min="0"></div>
+<div class="field"><label>Garnishment Type</label><select id="type"><option value="consumer">Consumer Debt (25% max)</option><option value="support">Child/Spousal Support (50-65%)</option><option value="tax">Federal Tax Levy</option><option value="student">Student Loan (15%)</option></select></div>
+<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="married">Married</option></select></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Garnishment</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Garnishment Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Maximum Garnishment/Week</div><div class="result-value" id="r-max">—</div></div>
+<div class="result-item"><div class="result-label">Disposable Earnings</div><div class="result-value" id="r-disp">—</div></div>
+<div class="result-item"><div class="result-label">Take-Home After Garnishment</div><div class="result-value" id="r-net">—</div></div>
+<div class="result-item"><div class="result-label">Annual Garnishment Total</div><div class="result-value" id="r-annual">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +162,26 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const gross=parseFloat(document.getElementById('gross').value)||0;
+  const type=document.getElementById('type').value;
+  const status=document.getElementById('status').value;
+  // Federal min wage weekly protected amount
+  const minWage=7.25*30;
+  // Disposable earnings ≈ gross minus mandatory deductions (~25%)
+  const disposable=gross*0.75;
+  let maxGarn=0;
+  if(type==='consumer') maxGarn=Math.min(disposable*0.25,Math.max(0,disposable-minWage));
+  else if(type==='support') maxGarn=disposable*(status==='single'?0.50:0.60);
+  else if(type==='tax') maxGarn=Math.max(0,disposable-(status==='single'?250:300));
+  else if(type==='student') maxGarn=Math.min(disposable*0.15,Math.max(0,disposable-minWage));
+  const net=gross-maxGarn;
+  set('r-max',fmt(maxGarn));
+  set('r-disp',fmt(disposable));
+  set('r-net',fmt(net));
+  set('r-annual',fmt(maxGarn*52));
   document.getElementById('result').classList.add('show');
 }
 </script>

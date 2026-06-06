@@ -96,19 +96,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Annual Gross Salary (AUD)</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Filing / Residency Status</label><select id="status"><option value="single">Single / Individual</option><option value="married">Married / Joint</option></select></div>
+<div class="field"><label>Superannuation Rate (%)</label><input id="super" type="number" value="11.5" step="0.5" min="0" max="30"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Australia Tax</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Australia Take-Home Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Gross Salary</div><div class="result-value" id="r-gross">—</div></div>
+<div class="result-item"><div class="result-label">Income Tax</div><div class="result-value" id="r-tax" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Social Contributions</div><div class="result-value" id="r-social" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Annual Take-Home</div><div class="result-value" id="r-annual">—</div></div>
+<div class="result-item"><div class="result-label">Monthly Take-Home</div><div class="result-value" id="r-monthly">—</div></div>
+<div class="result-item"><div class="result-label">Effective Tax Rate</div><div class="result-value" id="r-rate">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +164,35 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
+function calcAusTax(inc){
+  const br=[[18200,0],[45000,.19],[120000,.325],[180000,.37],[Infinity,.45]];
+  let tax=0,prev=0;
+  for(const[u,r]of br){if(inc<=prev)break;tax+=(Math.min(inc,u)-prev)*r;prev=u;}
+  // Low Income Tax Offset
+  let lito=0;
+  if(inc<=37500)lito=700;
+  else if(inc<=45000)lito=700-(inc-37500)*0.05;
+  else if(inc<=66667)lito=325-(inc-45000)*0.015;
+  return Math.max(0,tax-lito);
+}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const superRate=(parseFloat(document.getElementById('super').value)||0)/100;
+  const tax=calcAusTax(salary);
+  // Medicare levy 2%
+  const medicare=salary*0.02;
+  // Superannuation (paid by employer on top, shown as employee cost context)
+  const superAmt=salary*superRate;
+  const net=salary-tax-medicare;
+  document.getElementById('r-gross').textContent='A$'+Math.round(salary).toLocaleString('en-US');
+  document.getElementById('r-tax').textContent='A$'+Math.round(tax+medicare).toLocaleString('en-US');
+  document.getElementById('r-social').textContent='Super: A$'+Math.round(superAmt).toLocaleString('en-US')+' (employer)';
+  document.getElementById('r-annual').textContent='A$'+Math.round(net).toLocaleString('en-US');
+  document.getElementById('r-monthly').textContent='A$'+Math.round(net/12).toLocaleString('en-US');
+  set('r-rate',(salary>0?(tax+medicare)/salary*100:0).toFixed(1)+'%');
   document.getElementById('result').classList.add('show');
 }
 </script>

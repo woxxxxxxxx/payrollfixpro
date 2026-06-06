@@ -94,21 +94,25 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Calculate tax on vested RSUs and supplemental income.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Enter Your RSU Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>RSU Shares Vesting</label><input id="shares" type="number" value="100" step="10" min="0"></div>
+<div class="field"><label>Share Price at Vesting ($)</label><input id="price" type="number" value="150" step="1" min="0"></div>
+<div class="field"><label>Other Annual Income ($)</label><input id="otherinc" type="number" value="120000" step="1000" min="0"></div>
+<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
+<div class="field"><label>Sale Price per Share ($) <em>optional</em></label><input id="saleprice" type="number" value="0" step="1" min="0" placeholder="0 = held, not sold"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate RSU Tax</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>RSU Tax Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Gross RSU Income</div><div class="result-value" id="r-gross">—</div></div>
+<div class="result-item"><div class="result-label">Supplemental Fed Tax (22%)</div><div class="result-value" id="r-fed" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">FICA on RSU</div><div class="result-value" id="r-fica" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">After-Tax RSU Value</div><div class="result-value" id="r-net">—</div></div>
+<div class="result-item"><div class="result-label">Capital Gain/Loss (if sold)</div><div class="result-value" id="r-cg">—</div></div>
+<div class="result-item"><div class="result-label">Shares Needed for Tax</div><div class="result-value" id="r-sharestax">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +166,31 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const shares=parseFloat(document.getElementById('shares').value)||0;
+  const price=parseFloat(document.getElementById('price').value)||0;
+  const otherinc=parseFloat(document.getElementById('otherinc').value)||0;
+  const status=document.getElementById('status').value;
+  const saleprice=parseFloat(document.getElementById('saleprice').value)||0;
+  const grossRSU=shares*price;
+  // Supplemental 22% federal withholding (flat rate for supplemental wages)
+  const fedTax=grossRSU*0.22;
+  // FICA: SS 6.2% if under wage base; Medicare 1.45%
+  const ssBase=Math.max(0,Math.min(otherinc+grossRSU,176100)-Math.min(otherinc,176100));
+  const fica=ssBase*0.062+grossRSU*0.0145;
+  const net=grossRSU-fedTax-fica;
+  const cgNote=saleprice>0?fmt((saleprice-price)*shares)+' ('+(saleprice>price?'gain':'loss')+')':'N/A (not sold)';
+  const taxRate=(grossRSU>0?(fedTax+fica)/grossRSU:0);
+  const sharesForTax=price>0?Math.ceil((fedTax+fica)/price):0;
+  set('r-gross',fmt(grossRSU));
+  set('r-fed',fmt(fedTax));
+  set('r-fica',fmt(fica));
+  set('r-net',fmt(net));
+  set('r-cg',cgNote);
+  set('r-sharestax',sharesForTax+' shares ('+((taxRate*100).toFixed(1))+'%)');
   document.getElementById('result').classList.add('show');
 }
 </script>

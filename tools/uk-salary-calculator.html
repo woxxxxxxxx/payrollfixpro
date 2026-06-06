@@ -96,19 +96,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Annual Gross Salary (£)</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Filing / Residency Status</label><select id="status"><option value="single">Single / Individual</option><option value="married">Married / Joint</option></select></div>
+<div class="field"><label>Pension Contribution (%)</label><input id="pension" type="number" value="5" step="0.5" min="0" max="100"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate UK Tax</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>UK Take-Home Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Gross Salary</div><div class="result-value" id="r-gross">—</div></div>
+<div class="result-item"><div class="result-label">Income Tax</div><div class="result-value" id="r-tax" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Social Contributions</div><div class="result-value" id="r-social" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Annual Take-Home</div><div class="result-value" id="r-annual">—</div></div>
+<div class="result-item"><div class="result-label">Monthly Take-Home</div><div class="result-value" id="r-monthly">—</div></div>
+<div class="result-item"><div class="result-label">Effective Tax Rate</div><div class="result-value" id="r-rate">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +164,37 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
+function calcUKTax(inc){
+  const PA=12570; // personal allowance
+  // taper PA above £100k
+  const adjPA=inc>125140?0:inc>100000?Math.max(0,PA-(inc-100000)/2):PA;
+  const taxable=Math.max(0,inc-adjPA);
+  // Basic 20% up to £37700; Higher 40% up to £125140; Additional 45%
+  const basic=Math.min(taxable,37700)*0.20;
+  const higher=taxable>37700?Math.min(taxable-37700,125140-12570-37700)*0.40:0;
+  const additional=taxable>(125140-adjPA)?(taxable-(125140-adjPA))*0.45:0;
+  return basic+higher+additional;
+}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const pensionPct=(parseFloat(document.getElementById('pension').value)||0)/100;
+  const pension=salary*pensionPct;
+  const taxable=salary-pension;
+  const tax=calcUKTax(taxable);
+  // NI: Class 1 employee — 8% on £12,570–£50,270; 2% above
+  const niLow=Math.max(0,Math.min(salary,50270)-12570)*0.08;
+  const niHigh=Math.max(0,salary-50270)*0.02;
+  const ni=niLow+niHigh;
+  const net=salary-tax-ni-pension;
+  document.getElementById('r-gross').textContent='£'+Math.round(salary).toLocaleString('en-US');
+  document.getElementById('r-tax').textContent='£'+Math.round(tax).toLocaleString('en-US');
+  document.getElementById('r-social').textContent='NI: £'+Math.round(ni).toLocaleString('en-US');
+  document.getElementById('r-annual').textContent='£'+Math.round(net).toLocaleString('en-US');
+  document.getElementById('r-monthly').textContent='£'+Math.round(net/12).toLocaleString('en-US');
+  set('r-rate',(salary>0?(tax+ni)/salary*100:0).toFixed(1)+'%');
   document.getElementById('result').classList.add('show');
 }
 </script>

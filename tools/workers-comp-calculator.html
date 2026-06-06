@@ -94,21 +94,22 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Estimate workers compensation premiums and benefits.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Workers' Compensation Estimate</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Annual Gross Wages ($)</label><input id="wages" type="number" value="55000" step="1000" min="0"></div>
+<div class="field"><label>State WC Rate (per $100 payroll)</label><input id="rate" type="number" value="2.50" step="0.10" min="0" placeholder="Varies by job class & state"></div>
+<div class="field"><label>Temporary Disability Benefit (%)</label><input id="tdpct" type="number" value="66.7" step="0.1" min="0" max="100"></div>
+<div class="field"><label>Injury Duration (weeks)</label><input id="weeks" type="number" value="0" step="1" min="0"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Workers Comp</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Workers Comp Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Annual WC Premium (employer)</div><div class="result-value" id="r-premium">—</div></div>
+<div class="result-item"><div class="result-label">Weekly TD Benefit</div><div class="result-value" id="r-td">—</div></div>
+<div class="result-item"><div class="result-label">Total TD for Duration</div><div class="result-value" id="r-total">—</div></div>
+<div class="result-item"><div class="result-label">Wage Replacement Rate</div><div class="result-value" id="r-rate">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +163,20 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const wages=parseFloat(document.getElementById('wages').value)||0;
+  const rate=(parseFloat(document.getElementById('rate').value)||0)/100;
+  const tdpct=(parseFloat(document.getElementById('tdpct').value)||0)/100;
+  const weeks=parseFloat(document.getElementById('weeks').value)||0;
+  const premium=wages*rate;
+  const weeklyTD=(wages/52)*tdpct;
+  const total=weeklyTD*weeks;
+  set('r-premium',fmt(premium));
+  set('r-td',fmt(weeklyTD)+'/wk');
+  set('r-total',fmt(total));
+  set('r-rate',(tdpct*100).toFixed(1)+'%');
   document.getElementById('result').classList.add('show');
 }
 </script>

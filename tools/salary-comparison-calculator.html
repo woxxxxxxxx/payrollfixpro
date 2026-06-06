@@ -94,21 +94,25 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Side-by-side comparison of two salary offers.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Compare Two Salary Offers</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Offer A — Annual Salary ($)</label><input id="salA" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Offer B — Annual Salary ($)</label><input id="salB" type="number" value="95000" step="1000" min="0"></div>
+<div class="field"><label>Offer A — Benefits Value ($/yr)</label><input id="benA" type="number" value="15000" step="500" min="0"></div>
+<div class="field"><label>Offer B — Benefits Value ($/yr)</label><input id="benB" type="number" value="8000" step="500" min="0"></div>
+<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Compare Offers</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Offer Comparison</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Offer A — Net Pay</div><div class="result-value" id="r-netA">—</div></div>
+<div class="result-item"><div class="result-label">Offer B — Net Pay</div><div class="result-value" id="r-netB">—</div></div>
+<div class="result-item"><div class="result-label">Offer A — Total Comp</div><div class="result-value" id="r-totalA">—</div></div>
+<div class="result-item"><div class="result-label">Offer B — Total Comp</div><div class="result-value" id="r-totalB">—</div></div>
+<div class="result-item"><div class="result-label">Difference (net pay)</div><div class="result-value" id="r-diff">—</div></div>
+<div class="result-item"><div class="result-label">Better Offer (total comp)</div><div class="result-value" id="r-winner">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +166,48 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
+function calcFedTax(inc,status){
+  const std={single:15000,mfj:30000,mfs:15000,hoh:22500};
+  const br={
+    single:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+    mfj:   [[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+    mfs:   [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[375800,.35],[Infinity,.37]],
+    hoh:   [[17000,.10],[64300,.12],[103350,.22],[197300,.24],[250500,.32],[626350,.35],[Infinity,.37]]
+  };
+  const taxable=Math.max(0,inc-(std[status]||15000));
+  const b=br[status]||br.single;
+  let tax=0,prev=0;
+  for(let i=0;i<b.length;i++){const[u,r]=b[i];if(taxable<=prev)break;tax+=(Math.min(taxable,u)-prev)*r;prev=u;}
+  return tax;
+}
+function netPay(sal,status){
+  const fed=calcFedTax(sal,status);
+  const fica=Math.min(sal,176100)*0.062+sal*0.0145;
+  return sal-fed-fica;
+}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salA=parseFloat(document.getElementById('salA').value)||0;
+  const salB=parseFloat(document.getElementById('salB').value)||0;
+  const benA=parseFloat(document.getElementById('benA').value)||0;
+  const benB=parseFloat(document.getElementById('benB').value)||0;
+  const status=document.getElementById('status').value;
+  const netA=netPay(salA,status);
+  const netB=netPay(salB,status);
+  const totalA=netA+benA;
+  const totalB=netB+benB;
+  const diff=netB-netA;
+  set('r-netA',fmt(netA));
+  set('r-netB',fmt(netB));
+  set('r-totalA',fmt(totalA));
+  set('r-totalB',fmt(totalB));
+  const diffEl=document.getElementById('r-diff');
+  diffEl.textContent=(diff>=0?'+':'')+fmt(diff)+'/yr (B vs A)';
+  diffEl.style.color=diff>=0?'#16a34a':'#dc2626';
+  const winner=totalA>=totalB?'Offer A (total comp)':'Offer B (total comp)';
+  set('r-winner',winner);
   document.getElementById('result').classList.add('show');
 }
 </script>

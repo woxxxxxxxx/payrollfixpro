@@ -96,19 +96,24 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Net Self-Employment Income ($)</label><input id="seinc" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
+<div class="field"><label>Business Expenses ($)</label><input id="expenses" type="number" value="5000" step="500" min="0"></div>
+<div class="field"><label>Retirement Contributions (SEP/Solo 401k $)</label><input id="retire" type="number" value="0" step="500" min="0"></div>
     </div>
     <button class="btn-primary" onclick="calc()">Calculate</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Self-Employment Tax Breakdown</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Net Profit (after expenses)</div><div class="result-value" id="r-profit">—</div></div>
+<div class="result-item"><div class="result-label">SE Tax (15.3%)</div><div class="result-value" id="r-se" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">½ SE Tax Deduction</div><div class="result-value" id="r-half">—</div></div>
+<div class="result-item"><div class="result-label">Federal Income Tax</div><div class="result-value" id="r-fed" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Total Tax Burden</div><div class="result-value" id="r-total" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Est. Net Take-Home</div><div class="result-value" id="r-net">—</div></div>
+<div class="result-item"><div class="result-label">Effective Tax Rate</div><div class="result-value" id="r-rate">—</div></div>
+<div class="result-item"><div class="result-label">Quarterly Est. Payment</div><div class="result-value" id="r-qtr">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +167,46 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
+function calcFedTax(inc,status){
+  const std={single:15000,mfj:30000,mfs:15000,hoh:22500};
+  const br={
+    single:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]],
+    mfj:   [[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]],
+    mfs:   [[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[375800,.35],[Infinity,.37]],
+    hoh:   [[17000,.10],[64300,.12],[103350,.22],[197300,.24],[250500,.32],[626350,.35],[Infinity,.37]]
+  };
+  const taxable=Math.max(0,inc-(std[status]||15000));
+  const b=br[status]||br.single;
+  let tax=0,prev=0;
+  for(let i=0;i<b.length;i++){const[u,r]=b[i];if(taxable<=prev)break;tax+=(Math.min(taxable,u)-prev)*r;prev=u;}
+  return tax;
+}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const seinc=parseFloat(document.getElementById('seinc').value)||0;
+  const status=document.getElementById('status').value;
+  const expenses=parseFloat(document.getElementById('expenses').value)||0;
+  const retire=parseFloat(document.getElementById('retire').value)||0;
+  const profit=Math.max(0,seinc-expenses);
+  // SE tax: 92.35% of net profit × 15.3%
+  const seTaxBase=profit*0.9235;
+  const seTax=seTaxBase*0.153;
+  const halfSE=seTax/2;
+  const fedAgi=Math.max(0,profit-halfSE-retire);
+  const fedTax=calcFedTax(fedAgi,status);
+  const total=seTax+fedTax;
+  const net=profit-total;
+  const effRate=profit>0?total/profit*100:0;
+  set('r-profit',fmt(profit));
+  set('r-se',fmt(seTax));
+  set('r-half',fmt(halfSE));
+  set('r-fed',fmt(fedTax));
+  set('r-total',fmt(total));
+  set('r-net',fmt(net));
+  set('r-rate',effRate.toFixed(1)+'%');
+  set('r-qtr',fmt(total/4));
   document.getElementById('result').classList.add('show');
 }
 </script>

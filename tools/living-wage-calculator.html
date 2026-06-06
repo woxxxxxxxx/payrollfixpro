@@ -94,21 +94,23 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Find the living wage needed in your city or county.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Living Wage Calculator</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Hourly Wage ($)</label><input id="rate" type="number" value="20" step="0.25" min="0"></div>
+<div class="field"><label>Hours per Week</label><input id="hours" type="number" value="40" step="1" min="1" max="80"></div>
+<div class="field"><label>Monthly Housing Cost ($)</label><input id="housing" type="number" value="1500" step="100" min="0"></div>
+<div class="field"><label>Monthly Other Expenses ($)</label><input id="expenses" type="number" value="2000" step="100" min="0"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Check Living Wage</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Living Wage Analysis</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Annual Gross</div><div class="result-value" id="r-annual">—</div></div>
+<div class="result-item"><div class="result-label">Monthly Gross</div><div class="result-value" id="r-monthly">—</div></div>
+<div class="result-item"><div class="result-label">Monthly Expenses</div><div class="result-value" id="r-exp" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Monthly Surplus / Shortfall</div><div class="result-value" id="r-surplus">—</div></div>
+<div class="result-item"><div class="result-label">Required Hourly for Break-Even</div><div class="result-value" id="r-req">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +164,27 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const rate=parseFloat(document.getElementById('rate').value)||0;
+  const hours=parseFloat(document.getElementById('hours').value)||40;
+  const housing=parseFloat(document.getElementById('housing').value)||0;
+  const other=parseFloat(document.getElementById('expenses').value)||0;
+  const annual=rate*hours*52;
+  const monthly=annual/12;
+  const totalExp=housing+other;
+  // Rough net after ~28% taxes
+  const monthlyNet=monthly*0.72;
+  const surplus=monthlyNet-totalExp;
+  const reqHourly=totalExp/0.72/(hours*52/12);
+  set('r-annual',fmt(annual));
+  set('r-monthly',fmt(monthlyNet)+' (est. net)');
+  set('r-exp',fmt(totalExp)+'/mo');
+  const surpEl=document.getElementById('r-surplus');
+  surpEl.textContent=(surplus>=0?'+':'')+fmt(surplus)+'/mo';
+  surpEl.style.color=surplus>=0?'#16a34a':'#dc2626';
+  set('r-req','$'+reqHourly.toFixed(2)+'/hr');
   document.getElementById('result').classList.add('show');
 }
 </script>

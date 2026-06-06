@@ -94,21 +94,26 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Calculate fully-loaded employee cost including all overhead.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Enter Employee Cost Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Employee Annual Salary ($)</label><input id="salary" type="number" value="60000" step="1000" min="0"></div>
+<div class="field"><label>Number of Employees</label><input id="headcount" type="number" value="1" step="1" min="1"></div>
+<div class="field"><label>Employer Health Insurance ($/employee/yr)</label><input id="health" type="number" value="6000" step="500" min="0"></div>
+<div class="field"><label>Employer 401(k) Match (%)</label><input id="match" type="number" value="4" step="0.5" min="0" max="100"></div>
+<div class="field"><label>State SUTA Rate (%)</label><input id="suta" type="number" value="2.7" step="0.1" min="0" max="20"></div>
+<div class="field"><label>Other Benefits per Employee ($/yr)</label><input id="other" type="number" value="1500" step="100" min="0"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Total Employee Cost</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Total Employer Cost</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Base Salary</div><div class="result-value" id="r-salary">—</div></div>
+<div class="result-item"><div class="result-label">Employer FICA (7.65%)</div><div class="result-value" id="r-fica">—</div></div>
+<div class="result-item"><div class="result-label">FUTA + SUTA</div><div class="result-value" id="r-futa">—</div></div>
+<div class="result-item"><div class="result-label">Benefits (health+401k+other)</div><div class="result-value" id="r-benefits">—</div></div>
+<div class="result-item"><div class="result-label">Cost Per Employee</div><div class="result-value" id="r-per">—</div></div>
+<div class="result-item"><div class="result-label">Total Headcount Cost</div><div class="result-value" id="r-total">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +167,27 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const headcount=parseFloat(document.getElementById('headcount').value)||1;
+  const health=parseFloat(document.getElementById('health').value)||0;
+  const matchPct=(parseFloat(document.getElementById('match').value)||0)/100;
+  const sutaRate=(parseFloat(document.getElementById('suta').value)||0)/100;
+  const other=parseFloat(document.getElementById('other').value)||0;
+  const fica=(Math.min(salary,176100)*0.062+salary*0.0145);
+  const futa=Math.min(salary,7000)*0.006;
+  const suta=Math.min(salary,7000)*sutaRate;
+  const match=salary*matchPct;
+  const benefits=health+match+other;
+  const perEmployee=salary+fica+futa+suta+benefits;
+  set('r-salary',fmt(salary));
+  set('r-fica',fmt(fica));
+  set('r-futa',fmt(futa+suta));
+  set('r-benefits',fmt(benefits));
+  set('r-per',fmt(perEmployee));
+  set('r-total',fmt(perEmployee*headcount));
   document.getElementById('result').classList.add('show');
 }
 </script>

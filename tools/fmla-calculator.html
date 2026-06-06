@@ -96,19 +96,22 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Annual Salary ($)</label><input id="salary" type="number" value="60000" step="1000" min="0"></div>
+<div class="field"><label>FMLA Leave Duration (weeks)</label><input id="weeks" type="number" value="6" step="1" min="0" max="12"></div>
+<div class="field"><label>Employer Paid Leave (%)</label><input id="paidpct" type="number" value="0" step="5" min="0" max="100" placeholder="0 = unpaid"></div>
+<div class="field"><label>State Paid Family Leave (%)</label><input id="statepct" type="number" value="60" step="5" min="0" max="100" placeholder="e.g. CA/NY/NJ 60-67%"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate FMLA Pay</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>FMLA Leave Estimate</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Weekly Salary</div><div class="result-value" id="r-weekly">—</div></div>
+<div class="result-item"><div class="result-label">Total Leave Weeks</div><div class="result-value" id="r-weeks">—</div></div>
+<div class="result-item"><div class="result-label">Employer Paid Amount</div><div class="result-value" id="r-employer">—</div></div>
+<div class="result-item"><div class="result-label">State PFL Benefit</div><div class="result-value" id="r-state">—</div></div>
+<div class="result-item"><div class="result-label">Lost Wages (unpaid gap)</div><div class="result-value" id="r-lost" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Total Received</div><div class="result-value" id="r-total">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +165,27 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const weeks=parseFloat(document.getElementById('weeks').value)||0;
+  const paidPct=(parseFloat(document.getElementById('paidpct').value)||0)/100;
+  const statePct=(parseFloat(document.getElementById('statepct').value)||0)/100;
+  const weekly=salary/52;
+  const totalLeavePay=weekly*weeks;
+  const employerPaid=totalLeavePay*paidPct;
+  // State PFL applies to the unpaid remainder
+  const unpaidBase=totalLeavePay*(1-paidPct);
+  const stateAmt=unpaidBase*statePct;
+  const lost=totalLeavePay-employerPaid-stateAmt;
+  const total=employerPaid+stateAmt;
+  set('r-weekly',fmt(weekly));
+  set('r-weeks',weeks+' weeks');
+  set('r-employer',fmt(employerPaid));
+  set('r-state',fmt(stateAmt));
+  set('r-lost',fmt(Math.max(0,lost)));
+  set('r-total',fmt(total));
   document.getElementById('result').classList.add('show');
 }
 </script>

@@ -94,21 +94,28 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Calculate 401k, health, and other pre-tax deductions.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Enter Your Deduction Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Annual Gross Salary ($)</label><input id="salary" type="number" value="75000" step="1000" min="0"></div>
+<div class="field"><label>Pay Frequency</label><select id="freq"><option value="26">Biweekly (26/yr)</option><option value="24">Semi-monthly (24/yr)</option><option value="12">Monthly (12/yr)</option><option value="52">Weekly (52/yr)</option></select></div>
+<div class="field"><label>401(k) Contribution (%)</label><input id="k401" type="number" value="6" step="0.5" min="0" max="100"></div>
+<div class="field"><label>Health Insurance ($/paycheck)</label><input id="health" type="number" value="150" step="10" min="0"></div>
+<div class="field"><label>HSA Contribution ($/year)</label><input id="hsa" type="number" value="0" step="100" min="0"></div>
+<div class="field"><label>FSA Contribution ($/year)</label><input id="fsa" type="number" value="0" step="100" min="0"></div>
+<div class="field"><label>Life Insurance ($/paycheck)</label><input id="life" type="number" value="10" step="5" min="0"></div>
+<div class="field"><label>Other Pre-Tax ($/paycheck)</label><input id="other" type="number" value="0" step="10" min="0"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Deductions</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Payroll Deduction Breakdown</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Gross Per Paycheck</div><div class="result-value" id="r-gross">—</div></div>
+<div class="result-item"><div class="result-label">401(k)</div><div class="result-value" id="r-k401" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Health + HSA + FSA</div><div class="result-value" id="r-health" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Life + Other</div><div class="result-value" id="r-other" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Total Pre-Tax Deductions</div><div class="result-value" id="r-total" style="color:#dc2626">—</div></div>
+<div class="result-item"><div class="result-label">Annual Tax Savings (est.)</div><div class="result-value" id="r-save">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +169,31 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const freq=parseInt(document.getElementById('freq').value)||26;
+  const k401pct=(parseFloat(document.getElementById('k401').value)||0)/100;
+  const healthPP=parseFloat(document.getElementById('health').value)||0;
+  const hsa=parseFloat(document.getElementById('hsa').value)||0;
+  const fsa=parseFloat(document.getElementById('fsa').value)||0;
+  const lifePP=parseFloat(document.getElementById('life').value)||0;
+  const otherPP=parseFloat(document.getElementById('other').value)||0;
+  const ppGross=salary/freq;
+  const ppK401=ppGross*k401pct;
+  const ppHealth=healthPP+hsa/freq+fsa/freq;
+  const ppLife=lifePP+otherPP;
+  const ppTotal=ppK401+ppHealth+ppLife;
+  const annPreTax=(ppK401+ppHealth+ppLife)*freq;
+  // Estimate tax savings at ~22% marginal rate
+  const taxSave=annPreTax*0.22;
+  set('r-gross',fmt(ppGross));
+  set('r-k401',fmt(ppK401));
+  set('r-health',fmt(ppHealth));
+  set('r-other',fmt(ppLife));
+  set('r-total',fmt(ppTotal));
+  set('r-save',fmt(taxSave));
   document.getElementById('result').classList.add('show');
 }
 </script>

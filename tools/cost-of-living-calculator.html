@@ -94,21 +94,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Compare purchasing power between cities and states.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Cost of Living Salary Adjustment</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Current Salary ($)</label><input id="salary" type="number" value="75000" step="1000" min="0"></div>
+<div class="field"><label>Current City COL Index</label><input id="from" type="number" value="100" step="1" min="1" placeholder="100 = US average"></div>
+<div class="field"><label>New City COL Index</label><input id="to" type="number" value="120" step="1" min="1" placeholder="NYC ~187, SF ~193, Austin ~110"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate COL Adjustment</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Cost of Living Comparison</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Equivalent Salary in New City</div><div class="result-value" id="r-new">—</div></div>
+<div class="result-item"><div class="result-label">Salary Difference</div><div class="result-value" id="r-diff">—</div></div>
+<div class="result-item"><div class="result-label">COL Adjustment Factor</div><div class="result-value" id="r-factor">—</div></div>
+<div class="result-item"><div class="result-label">Monthly Purchasing Power</div><div class="result-value" id="r-monthly">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +162,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const salary=parseFloat(document.getElementById('salary').value)||0;
+  const from=parseFloat(document.getElementById('from').value)||100;
+  const to=parseFloat(document.getElementById('to').value)||100;
+  const factor=to/from;
+  const newSal=salary*factor;
+  const diff=newSal-salary;
+  set('r-new',fmt(newSal));
+  const diffEl=document.getElementById('r-diff');
+  diffEl.textContent=(diff>=0?'+':'')+fmt(diff);
+  diffEl.style.color=diff<0?'#16a34a':'#dc2626';
+  set('r-factor',factor.toFixed(2)+'×');
+  set('r-monthly',fmt(salary/12)+" buys "+fmt(salary/12/factor)+" in new city");
   document.getElementById('result').classList.add('show');
 }
 </script>

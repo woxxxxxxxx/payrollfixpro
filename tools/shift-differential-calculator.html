@@ -96,19 +96,20 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Base Hourly Rate ($)</label><input id="rate" type="number" value="20" step="0.5" min="0"></div>
+<div class="field"><label>Shift Differential (%)</label><input id="diffpct" type="number" value="15" step="1" min="0" max="100"></div>
+<div class="field"><label>Shift Hours per Week</label><input id="shours" type="number" value="40" step="1" min="0" max="80"></div>
+<div class="field"><label>Weeks per Year on Shift</label><input id="weeks" type="number" value="50" step="1" min="1" max="52"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Shift Differential</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Shift Differential Pay</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Effective Hourly Rate</div><div class="result-value" id="r-eff">—</div></div>
+<div class="result-item"><div class="result-label">Weekly Differential Premium</div><div class="result-value" id="r-wk">—</div></div>
+<div class="result-item"><div class="result-label">Annual Differential Premium</div><div class="result-value" id="r-ann">—</div></div>
+<div class="result-item"><div class="result-label">Total Annual Pay (with diff)</div><div class="result-value" id="r-total">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +163,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const rate=parseFloat(document.getElementById('rate').value)||0;
+  const diffpct=(parseFloat(document.getElementById('diffpct').value)||0)/100;
+  const shours=parseFloat(document.getElementById('shours').value)||0;
+  const weeks=parseFloat(document.getElementById('weeks').value)||52;
+  const eff=rate*(1+diffpct);
+  const wkPrem=rate*diffpct*shours;
+  const annPrem=wkPrem*weeks;
+  const total=rate*shours*weeks+annPrem;
+  set('r-eff',fmt(eff));
+  set('r-wk',fmt(wkPrem));
+  set('r-ann',fmt(annPrem));
+  set('r-total',fmt(total));
   document.getElementById('result').classList.add('show');
 }
 </script>
