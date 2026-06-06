@@ -94,21 +94,26 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <p>Calculate employer and employee payroll tax obligations.</p>
   </div>
   <div class="form-card">
-    <h2>Enter Your Information</h2>
+    <h2>Enter Employee & Payroll Information</h2>
     <div class="form-grid">
-<div class="field"><label>Amount ($)</label><input id="gross" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Pay Period</label><select id="period"><option value="annual">Annual</option><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option><option value="hourly">Hourly</option></select></div>
+<div class="field"><label>Employee Gross Wages ($)</label><input id="wages" type="number" value="5000" step="100" min="0"></div>
+<div class="field"><label>Pay Frequency</label><select id="freq"><option value="26">Biweekly (26/yr)</option><option value="24">Semi-monthly (24/yr)</option><option value="12">Monthly (12/yr)</option><option value="52">Weekly (52/yr)</option><option value="1">Annual (1/yr)</option></select></div>
+<div class="field"><label>YTD Wages Paid So Far ($)</label><input id="ytd" type="number" value="0" step="1000" min="0" placeholder="0 if first paycheck"></div>
+<div class="field"><label>State SUTA Rate (%)</label><input id="suta" type="number" value="2.7" step="0.1" min="0" max="20" placeholder="e.g. 2.7"></div>
+<div class="field"><label>State SUTA Wage Base ($)</label><input id="sutaBase" type="number" value="7000" step="500" min="0" placeholder="varies by state"></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate</button>
+    <button class="btn-primary" onclick="calc()">Calculate Employer Taxes</button>
   </div>
   <div class="result-card" id="result">
-    <h2>Your Results</h2>
+    <h2>Employer Tax Costs — This Paycheck</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Annual</div><div class="result-value" id="r-annual">—</div></div>
-<div class="result-item"><div class="result-label">Monthly</div><div class="result-value" id="r-monthly">—</div></div>
-<div class="result-item"><div class="result-label">Biweekly</div><div class="result-value" id="r-biweekly">—</div></div>
-<div class="result-item"><div class="result-label">Hourly</div><div class="result-value" id="r-hourly">—</div></div>
-
+<div class="result-item"><div class="result-label">Employer SS (6.2%)</div><div class="result-value" id="r-ss">—</div></div>
+<div class="result-item"><div class="result-label">Employer Medicare (1.45%)</div><div class="result-value" id="r-med">—</div></div>
+<div class="result-item"><div class="result-label">FUTA (0.6% eff.)</div><div class="result-value" id="r-futa">—</div></div>
+<div class="result-item"><div class="result-label">SUTA (State)</div><div class="result-value" id="r-suta">—</div></div>
+<div class="result-item"><div class="result-label">Total Employer Tax</div><div class="result-value" id="r-total">—</div></div>
+<div class="result-item"><div class="result-label">Total Cost Per Employee</div><div class="result-value" id="r-cost">—</div></div>
+<div class="result-item"><div class="result-label">Annual Employer SS+Med</div><div class="result-value" id="r-ann-fica">—</div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
@@ -162,19 +167,49 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   </div>
 </footer>
 <script>
-
+function fmt(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function set(id,v){document.getElementById(id).textContent=v;}
 function calc(){
-  var gross=parseFloat(document.getElementById('gross').value)||0;
-  var period=document.getElementById('period').value;
-  var mult={'annual':1,'monthly':12,'biweekly':26,'weekly':52,'hourly':2080};
-  var annual=gross*(mult[period]||1);
-  var monthly=annual/12;
-  var biweekly=annual/26;
-  var hourly=annual/2080;
-  document.getElementById('r-annual').textContent='$'+annual.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-monthly').textContent='$'+monthly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-biweekly').textContent='$'+biweekly.toLocaleString('en-US',{maximumFractionDigits:2});
-  document.getElementById('r-hourly').textContent='$'+hourly.toFixed(2);
+  const wages=parseFloat(document.getElementById('wages').value)||0;
+  const freq=parseInt(document.getElementById('freq').value)||26;
+  const ytd=parseFloat(document.getElementById('ytd').value)||0;
+  const sutaRate=(parseFloat(document.getElementById('suta').value)||0)/100;
+  const sutaBase=parseFloat(document.getElementById('sutaBase').value)||7000;
+
+  // Social Security: 6.2% up to $176,100 annual wage base
+  const SS_BASE=176100;
+  const ytdAfter=ytd+wages;
+  const ssWages=Math.max(0,Math.min(ytdAfter,SS_BASE)-Math.min(ytd,SS_BASE));
+  const empSS=ssWages*0.062;
+
+  // Medicare: 1.45% (no cap, employer never pays Additional Medicare Tax)
+  const empMed=wages*0.0145;
+
+  // FUTA: 6% on first $7,000 per employee per year; effective rate 0.6% after state credit
+  const FUTA_BASE=7000;
+  const futaWages=Math.max(0,Math.min(ytdAfter,FUTA_BASE)-Math.min(ytd,FUTA_BASE));
+  const empFuta=futaWages*0.006; // effective after full state credit
+
+  // SUTA
+  const sutaWages=Math.max(0,Math.min(ytdAfter,sutaBase)-Math.min(ytd,sutaBase));
+  const empSuta=sutaWages*sutaRate;
+
+  const totalTax=empSS+empMed+empFuta+empSuta;
+  const totalCost=wages+totalTax;
+
+  // Annualized SS + Med (assuming full year at this wage)
+  const annWages=wages*freq;
+  const annSS=Math.min(annWages,SS_BASE)*0.062;
+  const annMed=annWages*0.0145;
+  const annFica=annSS+annMed;
+
+  set('r-ss',fmt(empSS));
+  set('r-med',fmt(empMed));
+  set('r-futa',fmt(empFuta));
+  set('r-suta',fmt(empSuta));
+  set('r-total',fmt(totalTax));
+  set('r-cost',fmt(totalCost));
+  set('r-ann-fica',fmt(annFica));
   document.getElementById('result').classList.add('show');
 }
 </script>
