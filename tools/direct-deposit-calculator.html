@@ -75,16 +75,21 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 .footer-links a{color:#94a3b8;font-size:13px;transition:color .15s}
 .footer-links a:hover{color:#fff}
 .footer-copy{font-size:13px;width:100%}
-@media(max-width:600px){.form-grid{grid-template-columns:1fr}.related-grid{grid-template-columns:1fr}.tool-hero h1{font-size:1.5rem}}</style>
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.related-grid{grid-template-columns:1fr}.tool-hero h1{font-size:1.5rem}}
+#btt{position:fixed;bottom:28px;right:24px;width:42px;height:42px;background:var(--primary,#0891b2);color:#fff;border:none;border-radius:50%;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all .2s;z-index:99}
+#btt.show{display:flex}
+#btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
+@media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
+</style>
 </head>
 <body>
 <header>
   <div class="header-inner">
-    <a href="/" class="logo">Payroll<span>Fix</span>Pro</a>
+    <a href="/" class="logo"><img src="/logo.svg" alt="PayrollFixPro" height="38"></a>
     <a href="/" class="nav-all">All Tools</a>
   </div>
 </header>
-<div class="breadcrumb"><a href="/">Home</a><span>&rsaquo;</span>Direct Deposit Calculator</div>
+<div class="breadcrumb"><a href="/">Home</a><span>&rsaquo;</span><a href="/">Tools</a><span>&rsaquo;</span>Direct Deposit Calculator</div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
   <div style="display:inline-block;width:100%;max-width:468px;height:60px;border:1px dashed #ccc;background:#fafafa;line-height:60px;text-align:center;color:#aaa;font-size:12px;letter-spacing:1px;">ADVERTISEMENT</div>
 </div>
@@ -203,6 +208,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     <div class="footer-copy">© 2026 PayrollFixPro. All rights reserved. For informational purposes only — consult a tax professional for advice.</div>
   </div>
 </footer>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8679;</button>
 <script>
 function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
 function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -242,6 +248,8 @@ function calc(){
   set('r-net',fmt(net));
   document.getElementById('result').classList.add('show');
 }
+
+window.addEventListener('scroll',function(){var b=document.getElementById('btt');if(b)b.classList.toggle('show',window.scrollY>300);});
 </script>
 </body>
 </html>
