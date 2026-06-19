@@ -21,11 +21,16 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
 a{text-decoration:none;color:inherit}
 header{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.header-inner{max-width:860px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:24px}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:24px}
 .logo{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px}
 .logo span{color:var(--primary)}
 .nav-all{margin-left:auto;font-size:14px;font-weight:600;color:var(--primary);padding:7px 16px;border:1.5px solid var(--primary);border-radius:var(--radius-sm);transition:all .15s}
 .nav-all:hover{background:var(--primary);color:#fff}
+.site-nav{margin-left:auto;display:flex;align-items:center;gap:8px}
+.site-nav .nav-link{margin-left:0;font-size:14px;font-weight:600;color:var(--text2);padding:7px 12px;border-radius:var(--radius-sm);transition:all .15s}
+.site-nav .nav-link:hover{color:var(--primary);background:var(--primary-dim)}
+.site-nav .nav-link-outline{color:var(--primary);border:1.5px solid var(--primary);padding:7px 16px}
+.site-nav .nav-link-outline:hover{background:var(--primary);color:#fff}
 .breadcrumb{max-width:860px;margin:16px auto 0;padding:0 20px;font-size:13px;color:var(--text3)}
 .breadcrumb a{color:var(--primary)}
 .breadcrumb span{margin:0 6px}
@@ -87,7 +92,10 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 <header>
   <div class="header-inner">
     <a href="/" class="logo"><img src="/logo.svg" alt="PayrollFixPro" height="38"></a>
-    <a href="/blog/" class="nav-all" style="margin-left:0">Blog</a><a href="/" class="nav-all">All Tools</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/" class="nav-link nav-link-outline">All Tools</a>
+      <a href="/blog/" class="nav-link">Blog</a>
+    </nav>
   </div>
 </header>
 <div class="breadcrumb"><a href="/">Home</a><span>&rsaquo;</span><a href="/">Tools</a><span>&rsaquo;</span>Bonus Tax Calculator</div>
@@ -110,11 +118,11 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="result-card" id="result">
     <h2>Your Results</h2>
     <div class="result-grid">
-<div class="result-item"><div class="result-label">Federal Tax</div><div class="result-value" id="r-fed">—</div></div>
-<div class="result-item"><div class="result-label">FICA</div><div class="result-value" id="r-ss">—</div></div>
-<div class="result-item"><div class="result-label">State Tax</div><div class="result-value" id="r-state">—</div></div>
-<div class="result-item"><div class="result-label">Total Tax</div><div class="result-value" id="r-total">—</div></div>
-<div class="result-item"><div class="result-label">Net Bonus</div><div class="result-value" id="r-net">—</div></div>
+<div class="result-item"><div class="result-label">Federal Tax</div><div class="result-value" id="r-fed">&mdash; </div></div>
+<div class="result-item"><div class="result-label">FICA</div><div class="result-value" id="r-ss">&mdash; </div></div>
+<div class="result-item"><div class="result-label">State Tax</div><div class="result-value" id="r-state">&mdash; </div></div>
+<div class="result-item"><div class="result-label">Total Tax</div><div class="result-value" id="r-total">&mdash; </div></div>
+<div class="result-item"><div class="result-label">Net Bonus</div><div class="result-value" id="r-net">&mdash; </div></div>
 
     </div>
   </div>
@@ -126,22 +134,15 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 <p>The <strong>Bonus Tax Calculator</strong> on PayrollFixPro is a free, easy-to-use online tool designed to help employees, HR professionals, small business owners, and freelancers accurately calculate tax calculation figures without complicated spreadsheets or expensive software.</p>
 <p>Whether you are a full-time salaried employee trying to understand your paycheck, a contractor estimating quarterly taxes, or an HR manager running payroll for a small team, this calculator gives you instant, reliable results based on current US tax laws and payroll standards.</p>
 <h3>How to Use This Calculator</h3>
-<p>Enter the required values in the form above — such as your gross pay, pay period, filing status, or hourly wage. Click <strong>Calculate</strong> to instantly see a detailed breakdown of your results. All calculations happen in your browser and no data is ever stored or transmitted.</p>
+<p>Enter the required values in the form above &mdash; such as your gross pay, pay period, filing status, or hourly wage. Click <strong>Calculate</strong> to instantly see a detailed breakdown of your results. All calculations happen in your browser and no data is ever stored or transmitted.</p>
 <h3>Why Accurate Tax Calculation Calculations Matter</h3>
 <p>Incorrect payroll and salary calculations can lead to underpaid employees, IRS penalties, incorrect W-2 filings, and costly compliance issues. Using a dedicated calculator helps you avoid mistakes, plan your finances more confidently, and stay compliant with federal and state regulations.</p>
 <p>The IRS updates tax brackets, FICA wage bases, and standard deduction amounts annually. Our calculators are updated to reflect the latest 2026 figures so you always get accurate results. We recommend cross-checking results with a CPA or payroll professional for complex situations.</p>
 <h3>Who Should Use the Bonus Tax Calculator</h3>
 <p>This tool is ideal for: <strong>employees</strong> who want to verify their paycheck accuracy; <strong>job seekers</strong> comparing salary offers; <strong>HR professionals</strong> preparing payroll summaries; <strong>freelancers and contractors</strong> estimating tax obligations; and <strong>small business owners</strong> managing employee compensation. It works for hourly, salaried, and contract workers across all industries.</p>
-<p>PayrollFixPro offers 100+ free payroll calculators covering every aspect of compensation — from basic salary conversion to advanced tax modeling. Bookmark this page and return whenever you need a quick, accurate calculation.</p>
+<p>PayrollFixPro offers 100+ free payroll calculators covering every aspect of compensation &mdash; from basic salary conversion to advanced tax modeling. Bookmark this page and return whenever you need a quick, accurate calculation.</p>
   </div>
-    <div class="tool-content-modules"><div class="tool-info-card" id="use-cases-section">
-    <h2 class="tool-info-title">Common Use Cases</h2>
-    <ul class="tool-use-cases">
-      <li><strong>HR & Payroll Teams:</strong> Use the Bonus Tax Calculator to verify employee compensation figures, ensure accurate payroll processing, and prepare compliant pay statements every pay period.</li>
-      <li><strong>Employees & Job Seekers:</strong> Quickly calculate and compare salary offers, understand your take-home pay breakdown, and plan your personal budget with confidence.</li>
-      <li><strong>Freelancers & Contractors:</strong> Estimate your tax obligations, convert between hourly and annual rates, and set competitive pricing for your services.</li>
-    </ul>
-  </div></div>
+
 <div class="faq-section">
     <h2>Frequently Asked Questions</h2>
 <div class="faq-item"><div class="faq-q">What tax rates and brackets does the Bonus Tax Calculator use?</div><div class="faq-a">This calculator uses the latest 2026 IRS federal tax brackets, FICA rates (6.2% Social Security up to the wage base, 1.45% Medicare), and standard deduction amounts. State taxes vary by jurisdiction.</div></div>
@@ -210,7 +211,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
       <a href="/privacy.html">Privacy</a>
       <a href="/sitemap.xml">Sitemap</a>
     </div>
-    <div class="footer-copy">© 2026 PayrollFixPro. All rights reserved. For informational purposes only — consult a tax professional for advice.</div>
+    <div class="footer-copy">© 2026 PayrollFixPro. All rights reserved. For informational purposes only &mdash; consult a tax professional for advice.</div>
   </div>
 </footer>
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8679;</button>

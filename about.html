@@ -20,11 +20,16 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
 a{text-decoration:none;color:inherit}
 header{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.header-inner{max-width:860px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:24px}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:24px}
 .logo{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px}
 .logo span{color:var(--primary)}
 .nav-all{margin-left:auto;font-size:14px;font-weight:600;color:var(--primary);padding:7px 16px;border:1.5px solid var(--primary);border-radius:var(--radius-sm);transition:all .15s}
 .nav-all:hover{background:var(--primary);color:#fff}
+.site-nav{margin-left:auto;display:flex;align-items:center;gap:8px}
+.site-nav .nav-link{margin-left:0;font-size:14px;font-weight:600;color:var(--text2);padding:7px 12px;border-radius:var(--radius-sm);transition:all .15s}
+.site-nav .nav-link:hover{color:var(--primary);background:var(--primary-dim)}
+.site-nav .nav-link-outline{color:var(--primary);border:1.5px solid var(--primary);padding:7px 16px}
+.site-nav .nav-link-outline:hover{background:var(--primary);color:#fff}
 .breadcrumb{max-width:860px;margin:16px auto 0;padding:0 20px;font-size:13px;color:var(--text3)}
 .breadcrumb a{color:var(--primary)}
 .breadcrumb span{margin:0 6px}
@@ -88,14 +93,17 @@ p{font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:12px}
 <header>
   <div class="header-inner">
     <a href="/" class="logo"><img src="/logo.svg" alt="PayrollFixPro" height="38"></a>
-    <a href="/" class="nav-all">All Tools</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/" class="nav-link nav-link-outline">All Tools</a>
+      <a href="/blog/" class="nav-link">Blog</a>
+    </nav>
   </div>
-<a href="/blog/" style="margin-left:16px;font-weight:700;color:#0f766e">Blog</a></header>
+</header>
 <div class="page-wrap">
 <h1>About PayrollFixPro</h1>
 <p>PayrollFixPro is a free online platform offering 100+ payroll, salary, and tax calculators designed for employees, HR professionals, small business owners, and freelancers across the United States.</p>
 <h2>Our Mission</h2>
-<p>We believe that accurate payroll and tax information should be accessible to everyone — not just businesses that can afford expensive payroll software. Our mission is to provide fast, reliable, and completely free calculation tools that help people understand their compensation.</p>
+<p>We believe that accurate payroll and tax information should be accessible to everyone &mdash; not just businesses that can afford expensive payroll software. Our mission is to provide fast, reliable, and completely free calculation tools that help people understand their compensation.</p>
 <h2>What We Offer</h2>
 <p>From basic salary converters and paycheck estimators to advanced tools like quarterly tax planners, RSU calculators, and 401k projectors, PayrollFixPro covers every aspect of employee and freelance compensation. All tools are updated for the 2024 tax year.</p>
 <h2>Privacy First</h2>
