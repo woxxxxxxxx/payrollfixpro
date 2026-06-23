@@ -10,6 +10,8 @@
   gtag('config', 'G-PLWJ8VEN8D');
 </script>
 <meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-1638874323475457">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1638874323475457" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/assets/css/tool-modules.css">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -110,7 +112,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Annual Gross Salary (â‚?</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Annual Gross Salary (ï¿½?</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
 <div class="field"><label>Filing / Residency Status</label><select id="status"><option value="single">Single / Individual</option><option value="married">Married / Joint</option></select></div>
 <div class="field"><label>Tax Regime</label><select id="regime"><option value="new">New Regime (default)</option><option value="old">Old Regime</option></select></div>
     </div>
@@ -222,14 +224,14 @@ function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,max
 function set(id,v){document.getElementById(id).textContent=v;}
 function calcIndiaTax(inc,regime){
   if(regime==='new'){
-    // New regime FY26: rebate up to â‚?2L net
+    // New regime FY26: rebate up to ï¿½?2L net
     const br=[[400000,0],[400000,.05],[400000,.10],[400000,.15],[400000,.20],[Infinity,.30]];
     let tax=0,prev=0;
     for(const[band,r]of br){const upper=prev+band;if(inc<=prev)break;tax+=(Math.min(inc,upper)-prev)*r;prev=upper;}
     if(inc<=1200000)tax=0; // rebate Sec 87A for new regime
     return tax*1.04; // 4% cess
   } else {
-    // Old regime standard deduction â‚?0,000
+    // Old regime standard deduction ï¿½?0,000
     const taxable=Math.max(0,inc-50000);
     const br=[[250000,0],[250000,.05],[500000,.20],[Infinity,.30]];
     let tax=0,prev=0;
@@ -241,14 +243,14 @@ function calc(){
   const salary=parseFloat(document.getElementById('salary').value)||0;
   const regime=document.getElementById('regime').value;
   const tax=calcIndiaTax(salary,regime);
-  // PF: 12% up to â‚?,800/mo = â‚?1,600/yr
+  // PF: 12% up to ï¿½?,800/mo = ï¿½?1,600/yr
   const pf=Math.min(salary*0.12,21600);
   const net=salary-tax-pf;
-  document.getElementById('r-gross').textContent='â‚?+Math.round(salary).toLocaleString('en-IN');
-  document.getElementById('r-tax').textContent='â‚?+Math.round(tax).toLocaleString('en-IN');
-  document.getElementById('r-social').textContent='PF: â‚?+Math.round(pf).toLocaleString('en-IN');
-  document.getElementById('r-annual').textContent='â‚?+Math.round(net).toLocaleString('en-IN');
-  document.getElementById('r-monthly').textContent='â‚?+Math.round(net/12).toLocaleString('en-IN');
+  document.getElementById('r-gross').textContent='ï¿½?+Math.round(salary).toLocaleString('en-IN');
+  document.getElementById('r-tax').textContent='ï¿½?+Math.round(tax).toLocaleString('en-IN');
+  document.getElementById('r-social').textContent='PF: ï¿½?+Math.round(pf).toLocaleString('en-IN');
+  document.getElementById('r-annual').textContent='ï¿½?+Math.round(net).toLocaleString('en-IN');
+  document.getElementById('r-monthly').textContent='ï¿½?+Math.round(net/12).toLocaleString('en-IN');
   set('r-rate',(salary>0?(tax+pf)/salary*100:0).toFixed(1)+'%');
   document.getElementById('result').classList.add('show');
 }

@@ -10,6 +10,8 @@
   gtag('config', 'G-PLWJ8VEN8D');
 </script>
 <meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-1638874323475457">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1638874323475457" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/assets/css/tool-modules.css">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -269,16 +271,16 @@ function calc(){
 
   const ssOk=Math.abs(ssDiff)<2;
   const medOk=Math.abs(medDiff)<2;
-  set('r-ss-check',ssOk?'âœ?Correct ('+fmt(box4)+')':'âš?Expected '+fmt(ssExpected)+', got '+fmt(box4));
+  set('r-ss-check',ssOk?'ï¿½?Correct ('+fmt(box4)+')':'ï¿½?Expected '+fmt(ssExpected)+', got '+fmt(box4));
   document.getElementById('r-ss-check').style.color=ssOk?'#16a34a':'#d97706';
-  set('r-med-check',medOk?'âœ?Correct ('+fmt(box6)+')':'âš?Expected '+fmt(medExpected)+', got '+fmt(box6));
+  set('r-med-check',medOk?'ï¿½?Correct ('+fmt(box6)+')':'ï¿½?Expected '+fmt(medExpected)+', got '+fmt(box6));
   document.getElementById('r-med-check').style.color=medOk?'#16a34a':'#d97706';
 
   const notes=[];
-  if(!isRefund)notes.push('<strong>You may owe '+fmt(diff)+' at filing</strong> â€?consider adjusting your W-4 withholding.');
-  if(Math.abs(ssDiff)>=2)notes.push('SS discrepancy of '+fmt(ssDiff)+' detected â€?verify Box 3 & 4 with your employer.');
-  if(Math.abs(medDiff)>=2)notes.push('Medicare discrepancy of '+fmt(medDiff)+' detected â€?verify Box 5 & 6.');
-  if(box5>200000)notes.push('Box 5 exceeds $200,000 â€?Additional Medicare Tax (0.9%) applies to wages over $200k.');
+  if(!isRefund)notes.push('<strong>You may owe '+fmt(diff)+' at filing</strong> ï¿½?consider adjusting your W-4 withholding.');
+  if(Math.abs(ssDiff)>=2)notes.push('SS discrepancy of '+fmt(ssDiff)+' detected ï¿½?verify Box 3 & 4 with your employer.');
+  if(Math.abs(medDiff)>=2)notes.push('Medicare discrepancy of '+fmt(medDiff)+' detected ï¿½?verify Box 5 & 6.');
+  if(box5>200000)notes.push('Box 5 exceeds $200,000 ï¿½?Additional Medicare Tax (0.9%) applies to wages over $200k.');
   if(notes.length===0)notes.push('Your W-2 looks accurate. File by April 15, 2027 for tax year 2026.');
   document.getElementById('r-note').innerHTML=notes.join('<br>');
   document.getElementById('result').classList.add('show');

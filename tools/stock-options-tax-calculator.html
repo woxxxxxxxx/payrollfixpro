@@ -10,6 +10,8 @@
   gtag('config', 'G-PLWJ8VEN8D');
 </script>
 <meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-1638874323475457">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1638874323475457" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/assets/css/tool-modules.css">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -256,15 +258,15 @@ function calc(){
     const ssBase=Math.max(0,Math.min(otherinc+spread,176100)-Math.min(otherinc,176100));
     fica=ssBase*0.062+spread*0.0145;
   } else {
-    // ISO: no regular income tax at exercise (AMT may apply â€?not calculated here)
+    // ISO: no regular income tax at exercise (AMT may apply ï¿½?not calculated here)
     ordinaryInc=0;
     fedTax=0; fica=0;
-    note='ISO: No regular income tax at exercise. AMT may apply â€?consult a tax advisor.';
+    note='ISO: No regular income tax at exercise. AMT may apply ï¿½?consult a tax advisor.';
   }
   const net=spread-fedTax-fica;
   set('r-spread',fmt(spread));
   set('r-cost',fmt(cost));
-  set('r-ordinary',opttype==='nso'?fmt(ordinaryInc):'$0 (ISO â€?see note)');
+  set('r-ordinary',opttype==='nso'?fmt(ordinaryInc):'$0 (ISO ï¿½?see note)');
   set('r-tax',fedTax>0?fmt(fedTax):(opttype==='iso'?'AMT may apply':'$0'));
   set('r-fica',fica>0?fmt(fica):'$0 (ISO)');
   set('r-net',fmt(net));
