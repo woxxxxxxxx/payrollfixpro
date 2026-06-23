@@ -87,6 +87,36 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Independent Contractor Rate Calculator (W2-equivalent uplift) ===
+window.calcContractorRate = function (w2Salary, benefitsValue, billableWeeks, billableHoursPerWeek, overheadMonthly) {
+  w2Salary = +w2Salary || 0;
+  benefitsValue = +benefitsValue || w2Salary * 0.30;
+  billableWeeks = +billableWeeks || 48;
+  billableHoursPerWeek = +billableHoursPerWeek || 35;
+  overheadMonthly = +overheadMonthly || 800;
+  var seTaxUplift = w2Salary * 0.0765; // employer portion contractor must cover
+  var annualOverhead = overheadMonthly * 12;
+  var requiredRevenue = w2Salary + benefitsValue + seTaxUplift + annualOverhead;
+  var profitMargin = requiredRevenue * 0.15;
+  var targetRevenue = requiredRevenue + profitMargin;
+  var billableHours = billableWeeks * billableHoursPerWeek;
+  var hourlyRate = targetRevenue / billableHours;
+  return {
+    w2Equivalent: +w2Salary.toFixed(2),
+    benefitsValue: +benefitsValue.toFixed(2),
+    selfEmpTaxUplift: +seTaxUplift.toFixed(2),
+    annualOverhead: +annualOverhead.toFixed(2),
+    profitMargin: +profitMargin.toFixed(2),
+    requiredRevenue: +targetRevenue.toFixed(2),
+    billableHours: billableHours,
+    recommendedHourlyRate: +hourlyRate.toFixed(2),
+    recommendedDailyRate: +(hourlyRate * 8).toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

@@ -87,6 +87,37 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Billable Hours Calculator (utilization + leak detection) ===
+window.calcBillableHours = function (timeEntries, targetUtilization) {
+  if (!Array.isArray(timeEntries)) timeEntries = [];
+  targetUtilization = +targetUtilization || 0.75;
+  var billable = 0, nonBillable = 0, leakage = 0;
+  var byProject = {};
+  for (var i = 0; i < timeEntries.length; i++) {
+    var e = timeEntries[i] || {};
+    var hrs = +e.hours || 0;
+    if (e.billable) billable += hrs; else nonBillable += hrs;
+    if (e.billable && e.uninvoiced) leakage += hrs;
+    var key = e.project || 'unassigned';
+    byProject[key] = (byProject[key] || 0) + hrs;
+  }
+  var total = billable + nonBillable;
+  var utilization = total ? billable / total : 0;
+  return {
+    totalHours: +total.toFixed(2),
+    billableHours: +billable.toFixed(2),
+    nonBillableHours: +nonBillable.toFixed(2),
+    utilizationRate: +(utilization * 100).toFixed(1),
+    targetUtilization: +(targetUtilization * 100).toFixed(1),
+    onTarget: utilization >= targetUtilization,
+    revenueLeakHours: +leakage.toFixed(2),
+    hoursByProject: byProject
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

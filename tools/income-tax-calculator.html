@@ -87,6 +87,44 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Federal Income Tax Calculator (2024 brackets, multi filing status) ===
+window.FED_BRACKETS_2024 = {
+  single:           [[11600,0.10],[47150,0.12],[100525,0.22],[191950,0.24],[243725,0.32],[609350,0.35],[Infinity,0.37]],
+  married_joint:    [[23200,0.10],[94300,0.12],[201050,0.22],[383900,0.24],[487450,0.32],[731200,0.35],[Infinity,0.37]],
+  married_separate: [[11600,0.10],[47150,0.12],[100525,0.22],[191950,0.24],[243725,0.32],[365600,0.35],[Infinity,0.37]],
+  head_household:   [[16550,0.10],[63100,0.12],[100500,0.22],[191950,0.24],[243700,0.32],[609350,0.35],[Infinity,0.37]]
+};
+window.STANDARD_DEDUCTION_2024 = { single: 14600, married_joint: 29200, married_separate: 14600, head_household: 21900 };
+window.calcFederalIncomeTax = function (grossWages, filingStatus, itemizedDeductions, taxCredits) {
+  grossWages = +grossWages || 0;
+  filingStatus = filingStatus || 'single';
+  itemizedDeductions = +itemizedDeductions || 0;
+  taxCredits = +taxCredits || 0;
+  var standard = window.STANDARD_DEDUCTION_2024[filingStatus] || 14600;
+  var deduction = Math.max(itemizedDeductions, standard);
+  var taxable = Math.max(grossWages - deduction, 0);
+  var brackets = window.FED_BRACKETS_2024[filingStatus] || window.FED_BRACKETS_2024.single;
+  var tax = 0, lastLimit = 0;
+  for (var i = 0; i < brackets.length; i++) {
+    var limit = brackets[i][0], rate = brackets[i][1];
+    if (taxable > limit) { tax += (limit - lastLimit) * rate; lastLimit = limit; }
+    else { tax += (taxable - lastLimit) * rate; break; }
+  }
+  var afterCredits = Math.max(tax - taxCredits, 0);
+  return {
+    grossWages: +grossWages.toFixed(2),
+    deductionApplied: +deduction.toFixed(2),
+    deductionType: itemizedDeductions > standard ? 'itemized' : 'standard',
+    taxableIncome: +taxable.toFixed(2),
+    federalIncomeTax: +tax.toFixed(2),
+    taxCreditsApplied: +taxCredits.toFixed(2),
+    federalTaxOwed: +afterCredits.toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

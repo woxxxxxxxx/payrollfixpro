@@ -87,6 +87,31 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Annual Salary Calculator (hourly -> annual with PTO/holidays) ===
+window.calcAnnualSalary = function (hourlyRate, hoursPerWeek, weeksPerYear, ptoDays, paidHolidays) {
+  hourlyRate = +hourlyRate || 0;
+  hoursPerWeek = +hoursPerWeek || 40;
+  weeksPerYear = +weeksPerYear || 52;
+  ptoDays = +ptoDays || 0;
+  paidHolidays = +paidHolidays || 0;
+  var workedWeeks = weeksPerYear - (ptoDays + paidHolidays) / 5;
+  var paidHours = weeksPerYear * hoursPerWeek; // PTO/holidays are paid
+  var grossAnnual = paidHours * hourlyRate;
+  var effectiveRateWorked = workedWeeks > 0 ? grossAnnual / (workedWeeks * hoursPerWeek) : 0;
+  return {
+    hourlyRate: hourlyRate,
+    paidHoursPerYear: paidHours,
+    workedHoursPerYear: +(workedWeeks * hoursPerWeek).toFixed(1),
+    grossAnnualSalary: +grossAnnual.toFixed(2),
+    effectiveHourlyOnWorkedHours: +effectiveRateWorked.toFixed(2),
+    monthlyGross: +(grossAnnual/12).toFixed(2),
+    weeklyGross: +(grossAnnual/weeksPerYear).toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

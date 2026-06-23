@@ -87,6 +87,39 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Software Engineer Salary Calculator (level + location + equity) ===
+window.SWE_BASE_BY_LEVEL = { L1: 95000, L2: 130000, L3: 175000, L4: 225000, L5: 290000, L6: 380000, L7: 500000 };
+window.SWE_LOCATION_MULT = { SF: 1.0, NYC: 0.97, Seattle: 0.92, Austin: 0.82, Remote: 0.85, London: 0.65, Bangalore: 0.22, Toronto: 0.70 };
+window.calcSWESalary = function (level, location, signOnBonus, equity4yrUSD, perfRating) {
+  level = level || 'L3';
+  location = location || 'Remote';
+  signOnBonus = +signOnBonus || 0;
+  equity4yrUSD = +equity4yrUSD || 0;
+  perfRating = perfRating || 'meets';
+  var base = window.SWE_BASE_BY_LEVEL[level] || 150000;
+  var locMult = window.SWE_LOCATION_MULT[location] || 0.80;
+  var adjustedBase = base * locMult;
+  var perfMultiplier = { exceeds: 1.20, strongly_exceeds: 1.35, meets: 1.0, below: 0.65 }[perfRating] || 1.0;
+  var bonus = adjustedBase * 0.15 * perfMultiplier;
+  var annualEquity = equity4yrUSD / 4;
+  var year1Total = adjustedBase + bonus + signOnBonus + annualEquity;
+  var steadyState = adjustedBase + bonus + annualEquity;
+  return {
+    level: level,
+    location: location,
+    locationMultiplier: locMult,
+    adjustedBaseSalary: +adjustedBase.toFixed(0),
+    targetBonus: +bonus.toFixed(0),
+    annualizedEquity: +annualEquity.toFixed(0),
+    signOnBonus: +signOnBonus.toFixed(0),
+    year1TotalComp: +year1Total.toFixed(0),
+    steadyStateTotalComp: +steadyState.toFixed(0)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

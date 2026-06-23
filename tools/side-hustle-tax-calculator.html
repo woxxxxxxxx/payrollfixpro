@@ -87,6 +87,40 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Side Hustle Tax Calculator (W2 + 1099 combined marginal stacking) ===
+window.calcSideHustleTax = function (w2Wages, w2Withholding, sideGrossIncome, sideExpenses, filingStatus) {
+  w2Wages = +w2Wages || 0; w2Withholding = +w2Withholding || 0;
+  sideGrossIncome = +sideGrossIncome || 0; sideExpenses = +sideExpenses || 0;
+  filingStatus = filingStatus || 'single';
+  var sideNet = Math.max(sideGrossIncome - sideExpenses, 0);
+  var seTax = sideNet * 0.9235 * 0.153;
+  var halfSE = seTax / 2;
+  var totalIncome = w2Wages + sideNet - halfSE;
+  var standardDed = filingStatus === 'married' ? 29200 : 14600;
+  var taxable = Math.max(totalIncome - standardDed, 0);
+  // Determine marginal rate hit by side income
+  var marginalRate;
+  if (taxable < 47150) marginalRate = 0.12;
+  else if (taxable < 100525) marginalRate = 0.22;
+  else if (taxable < 191950) marginalRate = 0.24;
+  else if (taxable < 243725) marginalRate = 0.32;
+  else marginalRate = 0.35;
+  var sideTaxBurden = sideNet * marginalRate + seTax;
+  var newTotalTaxApprox = taxable * 0.18 + seTax; // simplified
+  var additionalOwed = Math.max(newTotalTaxApprox - w2Withholding, 0);
+  return {
+    sideNetProfit: +sideNet.toFixed(2),
+    selfEmploymentTax: +seTax.toFixed(2),
+    marginalRateOnSideIncome: marginalRate,
+    estimatedSideIncomeTaxBurden: +sideTaxBurden.toFixed(2),
+    additionalTaxOwedAtFiling: +additionalOwed.toFixed(2),
+    safeHarborQuarterly: +(seTax / 4).toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

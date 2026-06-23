@@ -87,6 +87,41 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Tax Bracket Walker (shows tax accumulated in each bracket layer) ===
+window.walkTaxBrackets = function (taxableIncome, filingStatus) {
+  taxableIncome = +taxableIncome || 0;
+  filingStatus = filingStatus || 'single';
+  var brackets = {
+    single:           [[0,11600,0.10],[11600,47150,0.12],[47150,100525,0.22],[100525,191950,0.24],[191950,243725,0.32],[243725,609350,0.35],[609350,Infinity,0.37]],
+    married_joint:    [[0,23200,0.10],[23200,94300,0.12],[94300,201050,0.22],[201050,383900,0.24],[383900,487450,0.32],[487450,731200,0.35],[731200,Infinity,0.37]]
+  }[filingStatus] || [];
+  var layers = [];
+  var totalTax = 0;
+  for (var i = 0; i < brackets.length; i++) {
+    var low = brackets[i][0], high = brackets[i][1], rate = brackets[i][2];
+    if (taxableIncome <= low) break;
+    var inBracket = Math.min(taxableIncome, high) - low;
+    var taxThisBracket = inBracket * rate;
+    totalTax += taxThisBracket;
+    layers.push({
+      bracketRange: '$' + low.toLocaleString() + ' - $' + (high === Infinity ? '∞' : high.toLocaleString()),
+      rate: (rate * 100) + '%',
+      incomeInBracket: +inBracket.toFixed(2),
+      taxFromThisBracket: +taxThisBracket.toFixed(2)
+    });
+  }
+  return {
+    taxableIncome: +taxableIncome.toFixed(2),
+    bracketWalk: layers,
+    totalFederalTax: +totalTax.toFixed(2),
+    effectiveRate: taxableIncome ? +(totalTax/taxableIncome*100).toFixed(2) : 0,
+    topMarginalRate: layers.length ? layers[layers.length-1].rate : '10%'
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

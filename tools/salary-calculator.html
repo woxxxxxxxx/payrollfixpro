@@ -87,6 +87,37 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Salary Calculator (cross-frequency conversion + COL adjustment) ===
+window.SALARY_COL_INDEX = { 'NYC': 187, 'SF': 192, 'Seattle': 144, 'Austin': 119, 'Chicago': 107, 'Atlanta': 99, 'Phoenix': 105, 'Cleveland': 84 };
+window.convertSalary = function (amount, fromUnit, toUnit, hoursPerWeek) {
+  amount = +amount || 0;
+  hoursPerWeek = +hoursPerWeek || 40;
+  var hoursPerYear = hoursPerWeek * 52;
+  var asAnnual = {
+    hourly: amount * hoursPerYear,
+    weekly: amount * 52,
+    biweekly: amount * 26,
+    monthly: amount * 12,
+    annual: amount
+  }[fromUnit] || amount;
+  var result = {
+    hourly: asAnnual / hoursPerYear,
+    weekly: asAnnual / 52,
+    biweekly: asAnnual / 26,
+    monthly: asAnnual / 12,
+    annual: asAnnual
+  };
+  return { annual: +asAnnual.toFixed(2), converted: +(result[toUnit] || asAnnual).toFixed(2), fromUnit: fromUnit, toUnit: toUnit };
+};
+window.adjustSalaryForCOL = function (salary, fromCity, toCity) {
+  var f = window.SALARY_COL_INDEX[fromCity] || 100;
+  var t = window.SALARY_COL_INDEX[toCity] || 100;
+  return { adjustedSalary: +(salary * t / f).toFixed(2), colRatio: +(t/f).toFixed(3) };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

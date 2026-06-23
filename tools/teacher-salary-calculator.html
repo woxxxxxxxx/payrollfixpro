@@ -87,6 +87,39 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Teacher Salary Calculator (step + lane + district COL) ===
+window.TEACHER_BASE_STEP1 = 45000;
+window.TEACHER_LANE_MULTIPLIER = { BA: 1.0, BA_plus_30: 1.08, MA: 1.18, MA_plus_30: 1.26, DOCTORATE: 1.42 };
+window.calcTeacherSalary = function (yearsOfService, educationLane, districtCOL, stipendDuties, contractDays) {
+  yearsOfService = +yearsOfService || 0;
+  educationLane = educationLane || 'BA';
+  districtCOL = +districtCOL || 1.0;
+  stipendDuties = +stipendDuties || 0;
+  contractDays = +contractDays || 185;
+  var stepCap = 25;
+  var effectiveYears = Math.min(yearsOfService, stepCap);
+  var stepIncrease = effectiveYears * 0.025; // 2.5% per step
+  var laneMult = window.TEACHER_LANE_MULTIPLIER[educationLane] || 1.0;
+  var baseStep = window.TEACHER_BASE_STEP1 * (1 + stepIncrease);
+  var laneSalary = baseStep * laneMult;
+  var colAdjusted = laneSalary * districtCOL;
+  var totalComp = colAdjusted + stipendDuties;
+  var dailyRate = totalComp / contractDays;
+  return {
+    step: effectiveYears,
+    lane: educationLane,
+    baseStepSalary: +baseStep.toFixed(2),
+    laneAdjustedSalary: +laneSalary.toFixed(2),
+    colAdjustedSalary: +colAdjusted.toFixed(2),
+    extraDutyStipends: +stipendDuties.toFixed(2),
+    totalAnnualComp: +totalComp.toFixed(2),
+    perContractDayRate: +dailyRate.toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

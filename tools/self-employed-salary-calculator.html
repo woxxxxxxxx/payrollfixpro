@@ -87,6 +87,35 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Self-Employed Salary Equivalent (after biz/tax/retirement deductions) ===
+window.calcSelfEmployedSalary = function (grossRevenue, businessExpenses, retirementContribution, healthPremium) {
+  grossRevenue = +grossRevenue || 0;
+  businessExpenses = +businessExpenses || 0;
+  retirementContribution = +retirementContribution || 0;
+  healthPremium = +healthPremium || 0;
+  var netBusinessIncome = grossRevenue - businessExpenses;
+  var seTax = Math.max(netBusinessIncome, 0) * 0.9235 * 0.153;
+  var afterSE = netBusinessIncome - seTax/2;
+  var afterRetirement = afterSE - retirementContribution;
+  var afterHealth = afterRetirement - healthPremium;
+  var fedTax = Math.max(afterHealth - 14600, 0) * 0.18;
+  var net = afterHealth - fedTax;
+  var w2Equivalent = net / (1 - 0.0765); // gross-up by employee FICA
+  return {
+    grossRevenue: +grossRevenue.toFixed(2),
+    netBusinessIncome: +netBusinessIncome.toFixed(2),
+    selfEmploymentTax: +seTax.toFixed(2),
+    retirementContribution: +retirementContribution.toFixed(2),
+    healthPremium: +healthPremium.toFixed(2),
+    federalIncomeTax: +fedTax.toFixed(2),
+    netTakeHome: +net.toFixed(2),
+    w2SalaryEquivalent: +w2Equivalent.toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

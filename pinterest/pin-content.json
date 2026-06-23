@@ -1,95 +1,5 @@
 [
   {
-    "file": "pin-1781226171531-1.png",
-    "name": "Commission Pay Calculator",
-    "image": "pin-1781226171531-1.png",
-    "title": "Commission Pay Calculator",
-    "desc": "Free Commission Pay Calculator — Calculate sales commission and total earnings. No signup required. Instant results for employees, HR teams & freelancers.",
-    "text": "Free Commission Pay Calculator — Calculate sales commission and total earnings. No signup required. Instant results for employees, HR teams & freelancers.",
-    "link": "https://payrollfixpro.com/tools/commission-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-2.png",
-    "name": "Gross Salary Calculator",
-    "image": "pin-1781226171531-2.png",
-    "title": "Gross Salary Calculator",
-    "desc": "Free Gross Salary Calculator — Work backwards from net pay to find gross salary. No signup required. Instant results for employees, HR teams & freelancers.",
-    "text": "Free Gross Salary Calculator — Work backwards from net pay to find gross salary. No signup required. Instant results for employees, HR teams & freelancers.",
-    "link": "https://payrollfixpro.com/tools/gross-salary-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-3.png",
-    "name": "Tax Refund Calculator",
-    "image": "pin-1781226171531-3.png",
-    "title": "Tax Refund Calculator",
-    "desc": "Free Tax Refund Calculator — Predict your federal tax refund or amount owed. No signup required. Instant results for employees, HR teams & freelancers.",
-    "text": "Free Tax Refund Calculator — Predict your federal tax refund or amount owed. No signup required. Instant results for employees, HR teams & freelancers.",
-    "link": "https://payrollfixpro.com/tools/tax-refund-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-4.png",
-    "name": "Holiday Pay Calculator",
-    "image": "pin-1781226171531-4.png",
-    "title": "Holiday Pay Calculator",
-    "desc": "Free Holiday Pay Calculator — Determine holiday pay for salaried and hourly employees. No signup required. Instant results for employees, HR teams & freelancers",
-    "text": "Free Holiday Pay Calculator — Determine holiday pay for salaried and hourly employees. No signup required. Instant results for employees, HR teams & freelancers",
-    "link": "https://payrollfixpro.com/tools/holiday-pay-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-5.png",
-    "name": "Tax Bracket Calculator",
-    "image": "pin-1781226171531-5.png",
-    "title": "Tax Bracket Calculator",
-    "desc": "Free Tax Bracket Calculator — Find which federal tax brackets apply to your income. No signup required. Instant results for employees, HR teams & freelancers.",
-    "text": "Free Tax Bracket Calculator — Find which federal tax brackets apply to your income. No signup required. Instant results for employees, HR teams & freelancers.",
-    "link": "https://payrollfixpro.com/tools/tax-bracket-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-6.png",
-    "name": "Salary Negotiation Calculator",
-    "image": "pin-1781226171531-6.png",
-    "title": "Salary Negotiation Calculator",
-    "desc": "Free Salary Negotiation Calculator — Model different salary offers and their long-term value. No signup required. Instant results for employees, HR teams & free",
-    "text": "Free Salary Negotiation Calculator — Model different salary offers and their long-term value. No signup required. Instant results for employees, HR teams & free",
-    "link": "https://payrollfixpro.com/tools/salary-negotiation-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-7.png",
-    "name": "Direct Deposit Calculator",
-    "image": "pin-1781226171531-7.png",
-    "title": "Direct Deposit Calculator",
-    "desc": "Free Direct Deposit Calculator — Split your paycheck across multiple bank accounts. No signup required. Instant results for employees, HR teams & freelancers.",
-    "text": "Free Direct Deposit Calculator — Split your paycheck across multiple bank accounts. No signup required. Instant results for employees, HR teams & freelancers.",
-    "link": "https://payrollfixpro.com/tools/direct-deposit-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-8.png",
-    "name": "Salary to Hourly Converter",
-    "image": "pin-1781226171531-8.png",
-    "title": "Salary to Hourly Converter",
-    "desc": "Free Salary to Hourly Converter — Convert annual salary to hourly, daily, or weekly pay. No signup required. Instant results for employees, HR teams & freelance",
-    "text": "Free Salary to Hourly Converter — Convert annual salary to hourly, daily, or weekly pay. No signup required. Instant results for employees, HR teams & freelance",
-    "link": "https://payrollfixpro.com/tools/salary-to-hourly.html"
-  },
-  {
-    "file": "pin-1781226171531-9.png",
-    "name": "Weekly Pay Calculator",
-    "image": "pin-1781226171531-9.png",
-    "title": "Weekly Pay Calculator",
-    "desc": "Free Weekly Pay Calculator — Calculate weekly gross pay from any pay period. No signup required. Instant results for employees, HR teams & freelancers.",
-    "text": "Free Weekly Pay Calculator — Calculate weekly gross pay from any pay period. No signup required. Instant results for employees, HR teams & freelancers.",
-    "link": "https://payrollfixpro.com/tools/weekly-pay-calculator.html"
-  },
-  {
-    "file": "pin-1781226171531-10.png",
-    "name": "Federal Withholding Calculator",
-    "image": "pin-1781226171531-10.png",
-    "title": "Federal Withholding Calculator",
-    "desc": "Free Federal Withholding Calculator — Determine federal income tax withheld per pay period. No signup required. Instant results for employees, HR teams & freela",
-    "text": "Free Federal Withholding Calculator — Determine federal income tax withheld per pay period. No signup required. Instant results for employees, HR teams & freela",
-    "link": "https://payrollfixpro.com/tools/federal-withholding-calculator.html"
-  },
-  {
     "file": "pin-1781282858837-1.png",
     "name": "Income Tax Calculator",
     "image": "pin-1781282858837-1.png",
@@ -447,6 +357,96 @@
     "title": "Billable Hours Calculator",
     "desc": "Free Billable Hours Calculator — Track and value billable hours for client invoicing. No signup required. Instant results for employees, HR teams & freelancers.",
     "text": "Free Billable Hours Calculator — Track and value billable hours for client invoicing. No signup required. Instant results for employees, HR teams & freelancers.",
+    "link": "https://payrollfixpro.com/tools/billable-hours-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-1.png",
+    "name": "Unemployment Benefits Calculator",
+    "image": "pin-1782234924009-1.png",
+    "title": "Unemployment Benefits Calculator",
+    "desc": "Estimate unemployment benefit amount and duration based on your state and prior earnings with eligibility details.",
+    "text": "Estimate unemployment benefit amount and duration based on your state and prior earnings with eligibility details.",
+    "link": "https://payrollfixpro.com/tools/unemployment-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-2.png",
+    "name": "Paycheck Tax Calculator",
+    "image": "pin-1782234924009-2.png",
+    "title": "Paycheck Tax Calculator",
+    "desc": "Calculate exact taxes withheld from your paycheck — federal income tax, Social Security, Medicare, and state taxes.",
+    "text": "Calculate exact taxes withheld from your paycheck — federal income tax, Social Security, Medicare, and state taxes.",
+    "link": "https://payrollfixpro.com/tools/paycheck-tax-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-3.png",
+    "name": "Income Tax Calculator",
+    "image": "pin-1782234924009-3.png",
+    "title": "Income Tax Calculator",
+    "desc": "Estimate your federal income tax liability for 2026 based on filing status, income, and deductions. See your effective tax rate and take-home pay instantly.",
+    "text": "Estimate your federal income tax liability for 2026 based on filing status, income, and deductions. See your effective tax rate and take-home pay instantly.",
+    "link": "https://payrollfixpro.com/tools/income-tax-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-4.png",
+    "name": "Tax Withholding Calculator",
+    "image": "pin-1782234924009-4.png",
+    "title": "Tax Withholding Calculator",
+    "desc": "Optimize tax withholding to match your actual liability. Avoid large refunds or surprise tax bills at filing time.",
+    "text": "Optimize tax withholding to match your actual liability. Avoid large refunds or surprise tax bills at filing time.",
+    "link": "https://payrollfixpro.com/tools/tax-withholding-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-5.png",
+    "name": "Tip Income Calculator",
+    "image": "pin-1782234924009-5.png",
+    "title": "Tip Income Calculator",
+    "desc": "Calculate tip amounts and split bills easily. Choose standard percentages or enter custom amounts for restaurant and service tipping.",
+    "text": "Calculate tip amounts and split bills easily. Choose standard percentages or enter custom amounts for restaurant and service tipping.",
+    "link": "https://payrollfixpro.com/tools/tip-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-6.png",
+    "name": "Salary Increase Calculator",
+    "image": "pin-1782234924009-6.png",
+    "title": "Salary Increase Calculator",
+    "desc": "Quantify a salary increase impact on total compensation. Compare before and after pay across all periods with tax implications.",
+    "text": "Quantify a salary increase impact on total compensation. Compare before and after pay across all periods with tax implications.",
+    "link": "https://payrollfixpro.com/tools/salary-increase-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-7.png",
+    "name": "Retirement Savings Calculator",
+    "image": "pin-1782234924009-7.png",
+    "title": "Retirement Savings Calculator",
+    "desc": "Project retirement savings growth with compound interest, monthly contributions, employer match, and investment returns.",
+    "text": "Project retirement savings growth with compound interest, monthly contributions, employer match, and investment returns.",
+    "link": "https://payrollfixpro.com/tools/retirement-savings-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-8.png",
+    "name": "UK Salary Calculator",
+    "image": "pin-1782234924009-8.png",
+    "title": "UK Salary Calculator",
+    "desc": "Calculate UK salary after Income Tax, National Insurance, and pension contributions for 2026/27 tax year.",
+    "text": "Calculate UK salary after Income Tax, National Insurance, and pension contributions for 2026/27 tax year.",
+    "link": "https://payrollfixpro.com/tools/uk-salary-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-9.png",
+    "name": "Consulting Fee Calculator",
+    "image": "pin-1782234924009-9.png",
+    "title": "Consulting Fee Calculator",
+    "desc": "Set profitable consulting fees based on expertise, market rates, and overhead. Calculate hourly, daily, and project rates.",
+    "text": "Set profitable consulting fees based on expertise, market rates, and overhead. Calculate hourly, daily, and project rates.",
+    "link": "https://payrollfixpro.com/tools/consulting-fee-calculator.html"
+  },
+  {
+    "file": "pin-1782234924009-10.png",
+    "name": "Billable Hours Calculator",
+    "image": "pin-1782234924009-10.png",
+    "title": "Billable Hours Calculator",
+    "desc": "Track and calculate billable hours for client invoicing. Convert billable time into revenue and optimize utilization rate.",
+    "text": "Track and calculate billable hours for client invoicing. Convert billable time into revenue and optimize utilization rate.",
     "link": "https://payrollfixpro.com/tools/billable-hours-calculator.html"
   }
 ]

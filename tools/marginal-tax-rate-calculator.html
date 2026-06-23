@@ -87,6 +87,36 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Marginal Tax Rate Calculator (next $1 cost, multi-jurisdiction) ===
+window.calcMarginalRate = function (taxableIncome, filingStatus, stateMarginal, includeFICA) {
+  taxableIncome = +taxableIncome || 0;
+  filingStatus = filingStatus || 'single';
+  stateMarginal = +stateMarginal || 0;
+  var brackets = filingStatus === 'married_joint'
+    ? [[23200,0.10],[94300,0.12],[201050,0.22],[383900,0.24],[487450,0.32],[731200,0.35],[Infinity,0.37]]
+    : [[11600,0.10],[47150,0.12],[100525,0.22],[191950,0.24],[243725,0.32],[609350,0.35],[Infinity,0.37]];
+  var fedMarginal = 0.10;
+  for (var i = 0; i < brackets.length; i++) {
+    if (taxableIncome <= brackets[i][0]) { fedMarginal = brackets[i][1]; break; }
+  }
+  var fica = includeFICA && taxableIncome <= 168600 ? 0.0765 : (includeFICA ? 0.0145 : 0);
+  var combined = fedMarginal + (stateMarginal/100) + fica;
+  var nextDollarCost = combined; // $1 income -> $combined tax
+  var keepFromNext100 = 100 * (1 - combined);
+  return {
+    income: +taxableIncome.toFixed(2),
+    federalMarginalRate: +(fedMarginal * 100).toFixed(2),
+    stateMarginalRate: stateMarginal,
+    ficaMarginalRate: +(fica * 100).toFixed(2),
+    combinedMarginalRate: +(combined * 100).toFixed(2),
+    taxOnNextDollar: +nextDollarCost.toFixed(4),
+    keepFromNext100Earned: +keepFromNext100.toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

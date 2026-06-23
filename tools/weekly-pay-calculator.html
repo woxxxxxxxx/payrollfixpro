@@ -87,6 +87,37 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Weekly Pay Calculator (regular + OT + double-time + shift differential) ===
+window.calcWeeklyPay = function (regularHours, regularRate, otHours, shiftDiffPct, doubleTimeHours, otThreshold) {
+  regularHours = +regularHours || 0;
+  regularRate = +regularRate || 0;
+  otHours = +otHours || 0;
+  doubleTimeHours = +doubleTimeHours || 0;
+  shiftDiffPct = +shiftDiffPct || 0;
+  otThreshold = +otThreshold || 40;
+  // If regular + OT > threshold, overflow goes to OT
+  var trueRegular = Math.min(regularHours, otThreshold);
+  var overflow = Math.max(regularHours - otThreshold, 0);
+  var effectiveOT = otHours + overflow;
+  var diffMult = 1 + (shiftDiffPct / 100);
+  var regularPay = trueRegular * regularRate * diffMult;
+  var otPay = effectiveOT * regularRate * 1.5 * diffMult;
+  var dtPay = doubleTimeHours * regularRate * 2.0 * diffMult;
+  return {
+    regularHours: trueRegular,
+    overtimeHours: +effectiveOT.toFixed(2),
+    doubleTimeHours: doubleTimeHours,
+    shiftDifferentialPct: shiftDiffPct,
+    regularPay: +regularPay.toFixed(2),
+    overtimePay: +otPay.toFixed(2),
+    doubleTimePay: +dtPay.toFixed(2),
+    totalWeeklyPay: +(regularPay + otPay + dtPay).toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

@@ -87,6 +87,38 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Net Salary Calculator (full deduction stack: fed+state+FICA+401k+health) ===
+window.calcNetSalary = function (gross, fedPct, statePct, k401Pct, healthPremium, otherPretax) {
+  gross = +gross || 0;
+  fedPct = (+fedPct || 12) / 100;
+  statePct = (+statePct || 5) / 100;
+  k401Pct = (+k401Pct || 0) / 100;
+  healthPremium = +healthPremium || 0;
+  otherPretax = +otherPretax || 0;
+  var k401 = gross * k401Pct;
+  var pretaxDeductions = k401 + healthPremium + otherPretax;
+  var taxable = gross - pretaxDeductions;
+  var federal = taxable * fedPct;
+  var state = taxable * statePct;
+  var socialSec = Math.min(gross, 168600) * 0.062;
+  var medicare = gross * 0.0145;
+  var net = gross - pretaxDeductions - federal - state - socialSec - medicare;
+  return {
+    grossPay: +gross.toFixed(2),
+    pretaxDeductions: +pretaxDeductions.toFixed(2),
+    k401Contribution: +k401.toFixed(2),
+    federalTax: +federal.toFixed(2),
+    stateTax: +state.toFixed(2),
+    socialSecurity: +socialSec.toFixed(2),
+    medicare: +medicare.toFixed(2),
+    netTakeHome: +net.toFixed(2),
+    netPercentOfGross: gross ? +(net/gross*100).toFixed(2) : 0
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

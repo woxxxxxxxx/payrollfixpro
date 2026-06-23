@@ -87,6 +87,38 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Gig Income Calculator (Uber/Doordash style: hourly net after costs) ===
+window.GIG_MILEAGE_DEDUCTION = 0.67;
+window.calcGigIncome = function (grossEarnings, milesDriven, fuelCost, tips, platformFeePct, hoursWorked) {
+  grossEarnings = +grossEarnings || 0;
+  milesDriven = +milesDriven || 0;
+  fuelCost = +fuelCost || 0;
+  tips = +tips || 0;
+  platformFeePct = +platformFeePct || 25;
+  hoursWorked = +hoursWorked || 1;
+  var platformFee = grossEarnings * platformFeePct / 100;
+  var afterFee = grossEarnings - platformFee + tips;
+  var mileageDeduction = milesDriven * window.GIG_MILEAGE_DEDUCTION;
+  var netCash = afterFee - fuelCost;
+  var taxableIncome = afterFee - mileageDeduction;
+  var estTax = Math.max(taxableIncome, 0) * 0.2535;
+  var trueHourly = (netCash - estTax) / hoursWorked;
+  return {
+    grossEarnings: +grossEarnings.toFixed(2),
+    platformFee: +platformFee.toFixed(2),
+    tips: +tips.toFixed(2),
+    fuelCost: +fuelCost.toFixed(2),
+    mileageDeduction: +mileageDeduction.toFixed(2),
+    taxableIncome: +taxableIncome.toFixed(2),
+    estimatedTax: +estTax.toFixed(2),
+    netTakeHome: +netCash.toFixed(2),
+    trueHourlyAfterTax: +trueHourly.toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

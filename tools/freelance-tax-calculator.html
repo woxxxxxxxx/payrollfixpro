@@ -87,6 +87,34 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Freelance Tax Estimator (income smoothing across multiple clients) ===
+window.calcFreelanceTax = function (clientPayments, deductibleExpenses, homeOfficePct, healthInsurance) {
+  if (!Array.isArray(clientPayments)) clientPayments = [];
+  deductibleExpenses = +deductibleExpenses || 0;
+  homeOfficePct = +homeOfficePct || 0;
+  healthInsurance = +healthInsurance || 0;
+  var grossRevenue = clientPayments.reduce(function (a, p) { return a + (+p.amount || 0); }, 0);
+  var homeOffice = deductibleExpenses * homeOfficePct / 100;
+  var netProfit = grossRevenue - deductibleExpenses - homeOffice - healthInsurance;
+  var seTax = Math.max(netProfit, 0) * 0.9235 * 0.153;
+  var federalEffective = netProfit > 100000 ? 0.24 : netProfit > 50000 ? 0.22 : 0.12;
+  var federalTax = Math.max(netProfit - seTax/2, 0) * federalEffective;
+  var stateTaxEst = Math.max(netProfit, 0) * 0.05;
+  return {
+    grossRevenue: +grossRevenue.toFixed(2),
+    totalDeductions: +(deductibleExpenses + homeOffice + healthInsurance).toFixed(2),
+    netProfit: +netProfit.toFixed(2),
+    selfEmploymentTax: +seTax.toFixed(2),
+    federalIncomeTax: +federalTax.toFixed(2),
+    stateTaxEstimate: +stateTaxEst.toFixed(2),
+    totalEstimatedTax: +(seTax + federalTax + stateTaxEst).toFixed(2),
+    effectiveTaxRate: grossRevenue ? +((seTax+federalTax+stateTaxEst)/grossRevenue*100).toFixed(2) : 0
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

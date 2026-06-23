@@ -87,6 +87,48 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === 1099-NEC Tax Estimator (SE tax + QBI deduction + quarterly est) ===
+window.SE_TAX_RATE = 0.153;
+window.SE_INCOME_CAP_SS = 168600; // 2024 SSA cap
+window.calc1099Tax = function (gross1099, businessExpenses, filingStatus, otherIncome) {
+  gross1099 = +gross1099 || 0;
+  businessExpenses = +businessExpenses || 0;
+  otherIncome = +otherIncome || 0;
+  filingStatus = filingStatus || 'single';
+  var netSE = Math.max(gross1099 - businessExpenses, 0);
+  var seTaxBase = netSE * 0.9235;
+  var ssPortion = Math.min(seTaxBase, window.SE_INCOME_CAP_SS) * 0.124;
+  var medicarePortion = seTaxBase * 0.029;
+  var seTax = ssPortion + medicarePortion;
+  var halfSE = seTax / 2;
+  var qbi = Math.max(netSE - halfSE, 0) * 0.20;
+  var standardDed = filingStatus === 'married' ? 29200 : 14600;
+  var taxableIncome = Math.max(netSE - halfSE - qbi + otherIncome - standardDed, 0);
+  var brackets = filingStatus === 'married'
+    ? [[0,0.10],[23200,0.12],[94300,0.22],[201050,0.24],[383900,0.32],[487450,0.35],[731200,0.37]]
+    : [[0,0.10],[11600,0.12],[47150,0.22],[100525,0.24],[191950,0.32],[243725,0.35],[609350,0.37]];
+  var incomeTax = 0;
+  for (var i = brackets.length - 1; i >= 0; i--) {
+    if (taxableIncome > brackets[i][0]) {
+      incomeTax += (taxableIncome - brackets[i][0]) * brackets[i][1];
+      taxableIncome = brackets[i][0];
+    }
+  }
+  var total = seTax + incomeTax;
+  return {
+    netSelfEmployment: +netSE.toFixed(2),
+    selfEmploymentTax: +seTax.toFixed(2),
+    halfSEDeduction: +halfSE.toFixed(2),
+    qbiDeduction: +qbi.toFixed(2),
+    incomeTax: +incomeTax.toFixed(2),
+    totalTaxOwed: +total.toFixed(2),
+    quarterlyPayment: +(total / 4).toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>

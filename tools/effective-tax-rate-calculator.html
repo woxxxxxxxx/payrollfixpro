@@ -87,6 +87,30 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<!-- DIFFERENTIATED-LOGIC-BEGIN -->
+<script>
+// === Effective Tax Rate Calculator (across federal+state+FICA aggregated) ===
+window.calcEffectiveTaxRate = function (grossIncome, federalTax, stateTax, ficaTax, otherTaxes) {
+  grossIncome = +grossIncome || 0;
+  federalTax = +federalTax || 0;
+  stateTax = +stateTax || 0;
+  ficaTax = +ficaTax || 0;
+  otherTaxes = +otherTaxes || 0;
+  var totalTax = federalTax + stateTax + ficaTax + otherTaxes;
+  if (grossIncome <= 0) return { error: 'Gross income must be positive' };
+  return {
+    grossIncome: +grossIncome.toFixed(2),
+    totalTaxPaid: +totalTax.toFixed(2),
+    federalEffectiveRate: +(federalTax/grossIncome*100).toFixed(2),
+    stateEffectiveRate: +(stateTax/grossIncome*100).toFixed(2),
+    ficaEffectiveRate: +(ficaTax/grossIncome*100).toFixed(2),
+    combinedEffectiveRate: +(totalTax/grossIncome*100).toFixed(2),
+    netTakeHome: +(grossIncome - totalTax).toFixed(2),
+    netTakeHomeRate: +((grossIncome - totalTax)/grossIncome*100).toFixed(2)
+  };
+};
+</script>
+<!-- DIFFERENTIATED-LOGIC-END -->
 </head>
 <body>
 <header>
