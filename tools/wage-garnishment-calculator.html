@@ -182,7 +182,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <h2>Recommended Payroll &amp; HR Tools</h2>
   <div class="affiliate-grid">
     <!-- AFFILIATE_LINK: replace with actual affiliate URL -->
-    <a href="https://deel.com" rel="nofollow" target="_blank" class="affiliate-card">
+    <a href="https://deel.com" rel="sponsored nofollow noopener" target="_blank" class="affiliate-card">
       <div class="affiliate-logo">De</div>
       <div class="affiliate-content">
         <div class="affiliate-name">Deel</div>
@@ -191,7 +191,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
       <span class="affiliate-cta">Try Free &#8594;</span>
     </a>
 <!-- AFFILIATE_LINK: replace with actual affiliate URL -->
-    <a href="https://freshbooks.com" rel="nofollow" target="_blank" class="affiliate-card">
+    <a href="https://freshbooks.com" rel="sponsored nofollow noopener" target="_blank" class="affiliate-card">
       <div class="affiliate-logo">FB</div>
       <div class="affiliate-content">
         <div class="affiliate-name">FreshBooks</div>
@@ -223,7 +223,7 @@ function calc(){
   const status=document.getElementById('status').value;
   // Federal min wage weekly protected amount
   const minWage=7.25*30;
-  // Disposable earnings â‰ˆ gross minus mandatory deductions (~25%)
+  // Disposable earnings â‰?gross minus mandatory deductions (~25%)
   const disposable=gross*0.75;
   let maxGarn=0;
   if(type==='consumer') maxGarn=Math.min(disposable*0.25,Math.max(0,disposable-minWage));

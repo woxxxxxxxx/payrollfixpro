@@ -190,7 +190,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <h2>Recommended Payroll &amp; HR Tools</h2>
   <div class="affiliate-grid">
     <!-- AFFILIATE_LINK: replace with actual affiliate URL -->
-    <a href="https://deel.com" rel="nofollow" target="_blank" class="affiliate-card">
+    <a href="https://deel.com" rel="sponsored nofollow noopener" target="_blank" class="affiliate-card">
       <div class="affiliate-logo">De</div>
       <div class="affiliate-content">
         <div class="affiliate-name">Deel</div>
@@ -199,7 +199,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
       <span class="affiliate-cta">Try Free &#8594;</span>
     </a>
 <!-- AFFILIATE_LINK: replace with actual affiliate URL -->
-    <a href="https://freshbooks.com" rel="nofollow" target="_blank" class="affiliate-card">
+    <a href="https://freshbooks.com" rel="sponsored nofollow noopener" target="_blank" class="affiliate-card">
       <div class="affiliate-logo">FB</div>
       <div class="affiliate-content">
         <div class="affiliate-name">FreshBooks</div>
@@ -269,16 +269,16 @@ function calc(){
 
   const ssOk=Math.abs(ssDiff)<2;
   const medOk=Math.abs(medDiff)<2;
-  set('r-ss-check',ssOk?'âœ“ Correct ('+fmt(box4)+')':'âš  Expected '+fmt(ssExpected)+', got '+fmt(box4));
+  set('r-ss-check',ssOk?'âœ?Correct ('+fmt(box4)+')':'âš?Expected '+fmt(ssExpected)+', got '+fmt(box4));
   document.getElementById('r-ss-check').style.color=ssOk?'#16a34a':'#d97706';
-  set('r-med-check',medOk?'âœ“ Correct ('+fmt(box6)+')':'âš  Expected '+fmt(medExpected)+', got '+fmt(box6));
+  set('r-med-check',medOk?'âœ?Correct ('+fmt(box6)+')':'âš?Expected '+fmt(medExpected)+', got '+fmt(box6));
   document.getElementById('r-med-check').style.color=medOk?'#16a34a':'#d97706';
 
   const notes=[];
-  if(!isRefund)notes.push('<strong>You may owe '+fmt(diff)+' at filing</strong> â€” consider adjusting your W-4 withholding.');
-  if(Math.abs(ssDiff)>=2)notes.push('SS discrepancy of '+fmt(ssDiff)+' detected â€” verify Box 3 & 4 with your employer.');
-  if(Math.abs(medDiff)>=2)notes.push('Medicare discrepancy of '+fmt(medDiff)+' detected â€” verify Box 5 & 6.');
-  if(box5>200000)notes.push('Box 5 exceeds $200,000 â€” Additional Medicare Tax (0.9%) applies to wages over $200k.');
+  if(!isRefund)notes.push('<strong>You may owe '+fmt(diff)+' at filing</strong> â€?consider adjusting your W-4 withholding.');
+  if(Math.abs(ssDiff)>=2)notes.push('SS discrepancy of '+fmt(ssDiff)+' detected â€?verify Box 3 & 4 with your employer.');
+  if(Math.abs(medDiff)>=2)notes.push('Medicare discrepancy of '+fmt(medDiff)+' detected â€?verify Box 5 & 6.');
+  if(box5>200000)notes.push('Box 5 exceeds $200,000 â€?Additional Medicare Tax (0.9%) applies to wages over $200k.');
   if(notes.length===0)notes.push('Your W-2 looks accurate. File by April 15, 2027 for tax year 2026.');
   document.getElementById('r-note').innerHTML=notes.join('<br>');
   document.getElementById('result').classList.add('show');

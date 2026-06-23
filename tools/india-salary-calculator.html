@@ -110,7 +110,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Annual Gross Salary (â‚¹)</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
+<div class="field"><label>Annual Gross Salary (â‚?</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
 <div class="field"><label>Filing / Residency Status</label><select id="status"><option value="single">Single / Individual</option><option value="married">Married / Joint</option></select></div>
 <div class="field"><label>Tax Regime</label><select id="regime"><option value="new">New Regime (default)</option><option value="old">Old Regime</option></select></div>
     </div>
@@ -184,7 +184,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <h2>Recommended Payroll &amp; HR Tools</h2>
   <div class="affiliate-grid">
     <!-- AFFILIATE_LINK: replace with actual affiliate URL -->
-    <a href="https://deel.com" rel="nofollow" target="_blank" class="affiliate-card">
+    <a href="https://deel.com" rel="sponsored nofollow noopener" target="_blank" class="affiliate-card">
       <div class="affiliate-logo">De</div>
       <div class="affiliate-content">
         <div class="affiliate-name">Deel</div>
@@ -193,7 +193,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
       <span class="affiliate-cta">Try Free &#8594;</span>
     </a>
 <!-- AFFILIATE_LINK: replace with actual affiliate URL -->
-    <a href="https://freshbooks.com" rel="nofollow" target="_blank" class="affiliate-card">
+    <a href="https://freshbooks.com" rel="sponsored nofollow noopener" target="_blank" class="affiliate-card">
       <div class="affiliate-logo">FB</div>
       <div class="affiliate-content">
         <div class="affiliate-name">FreshBooks</div>
@@ -222,14 +222,14 @@ function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,max
 function set(id,v){document.getElementById(id).textContent=v;}
 function calcIndiaTax(inc,regime){
   if(regime==='new'){
-    // New regime FY26: rebate up to â‚¹12L net
+    // New regime FY26: rebate up to â‚?2L net
     const br=[[400000,0],[400000,.05],[400000,.10],[400000,.15],[400000,.20],[Infinity,.30]];
     let tax=0,prev=0;
     for(const[band,r]of br){const upper=prev+band;if(inc<=prev)break;tax+=(Math.min(inc,upper)-prev)*r;prev=upper;}
     if(inc<=1200000)tax=0; // rebate Sec 87A for new regime
     return tax*1.04; // 4% cess
   } else {
-    // Old regime standard deduction â‚¹50,000
+    // Old regime standard deduction â‚?0,000
     const taxable=Math.max(0,inc-50000);
     const br=[[250000,0],[250000,.05],[500000,.20],[Infinity,.30]];
     let tax=0,prev=0;
@@ -241,14 +241,14 @@ function calc(){
   const salary=parseFloat(document.getElementById('salary').value)||0;
   const regime=document.getElementById('regime').value;
   const tax=calcIndiaTax(salary,regime);
-  // PF: 12% up to â‚¹1,800/mo = â‚¹21,600/yr
+  // PF: 12% up to â‚?,800/mo = â‚?1,600/yr
   const pf=Math.min(salary*0.12,21600);
   const net=salary-tax-pf;
-  document.getElementById('r-gross').textContent='â‚¹'+Math.round(salary).toLocaleString('en-IN');
-  document.getElementById('r-tax').textContent='â‚¹'+Math.round(tax).toLocaleString('en-IN');
-  document.getElementById('r-social').textContent='PF: â‚¹'+Math.round(pf).toLocaleString('en-IN');
-  document.getElementById('r-annual').textContent='â‚¹'+Math.round(net).toLocaleString('en-IN');
-  document.getElementById('r-monthly').textContent='â‚¹'+Math.round(net/12).toLocaleString('en-IN');
+  document.getElementById('r-gross').textContent='â‚?+Math.round(salary).toLocaleString('en-IN');
+  document.getElementById('r-tax').textContent='â‚?+Math.round(tax).toLocaleString('en-IN');
+  document.getElementById('r-social').textContent='PF: â‚?+Math.round(pf).toLocaleString('en-IN');
+  document.getElementById('r-annual').textContent='â‚?+Math.round(net).toLocaleString('en-IN');
+  document.getElementById('r-monthly').textContent='â‚?+Math.round(net/12).toLocaleString('en-IN');
   set('r-rate',(salary>0?(tax+pf)/salary*100:0).toFixed(1)+'%');
   document.getElementById('result').classList.add('show');
 }
