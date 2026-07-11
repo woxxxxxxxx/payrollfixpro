@@ -28,3 +28,7 @@
 ## 2026-06-28 AdSense ????
 - Blog ??/??? 16 ????????????? sitemap.xml?
 - ??????????/?????????
+
+## 2026-07-11 portfolio AdSense preflight
+- 2026-07-11 preflight: thin batch blogs and 60 high-risk calculator pages using generic tax formulas or country-specific broken logic were removed from index/ad inventory. Unsupported accuracy/current-law claims were removed. Added Editorial Policy, Contact, and Terms pages.
+- Required release check: `node C:\\Users\\Administrator\\pm-worker\\adsense-release-gate.js payrollfixpro`. Do not submit or deploy after a failed gate.
