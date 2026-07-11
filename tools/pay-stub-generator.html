@@ -89,8 +89,16 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<meta property="og:title" content="Pay Stub Generator - Free Calculator | PayrollFixPro">
+<meta property="og:description" content="Generate professional pay stub summaries showing gross pay, deductions, taxes withheld, and net pay for verification.">
+<meta property="og:url" content="https://payrollfixpro.com/tools/pay-stub-generator.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>.portfolio-skip-link{position:fixed;left:12px;top:12px;z-index:10000;padding:.65rem .9rem;background:#111827;color:#fff;border-radius:4px;transform:translateY(-160%)}.portfolio-skip-link:focus{transform:none}</style>
+<style>.decision-evidence{margin:2rem 0;padding:1.35rem;border:1px solid #bfd3ee;background:#f3f8ff;border-radius:6px}.decision-evidence h2{font-size:1.3rem;margin:0 0 .65rem}.decision-evidence p{line-height:1.75;margin:0}</style>
 </head>
 <body>
+<a class="portfolio-skip-link" href="#main-content">Skip to main content</a>
 <header>
   <div class="header-inner">
     <a href="/" class="logo"><img src="/logo.svg" alt="PayrollFixPro" height="38"></a>
@@ -104,7 +112,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
   <div style="display:inline-block;width:100%;max-width:468px;height:60px;border:1px dashed #ccc;background:#fafafa;line-height:60px;text-align:center;color:#aaa;font-size:12px;letter-spacing:1px;">ADVERTISEMENT</div>
 </div>
-<main>
+<main id="main-content">
   <div class="tool-hero">
     <h1>Pay Stub Generator</h1>
     <p>Create a professional pay stub for any pay period.</p>
@@ -112,11 +120,11 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Gross Pay ($)</label><input id="gross" type="number" value="3000" step="100" min="0"></div>
-<div class="field"><label>Federal Tax Rate</label><input id="fed" type="number" value="0.12" step="0.01" min="0" max="1"></div>
-<div class="field"><label>State Tax Rate</label><input id="state" type="number" value="0.05" step="0.01" min="0" max="1"></div>
-<div class="field"><label>401k Deduction ($)</label><input id="k401" type="number" value="180" step="10" min="0"></div>
-<div class="field"><label>Health Insurance ($)</label><input id="health" type="number" value="150" step="10" min="0"></div>
+<div class="field"><label>Gross Pay ($)</label><input id="gross" type="number" value="3000" step="100" min="0" aria-label="Gross"></div>
+<div class="field"><label>Federal Tax Rate</label><input id="fed" type="number" value="0.12" step="0.01" min="0" max="1" aria-label="Fed"></div>
+<div class="field"><label>State Tax Rate</label><input id="state" type="number" value="0.05" step="0.01" min="0" max="1" aria-label="State"></div>
+<div class="field"><label>401k Deduction ($)</label><input id="k401" type="number" value="180" step="10" min="0" aria-label="K401"></div>
+<div class="field"><label>Health Insurance ($)</label><input id="health" type="number" value="150" step="10" min="0" aria-label="Health"></div>
     </div>
     <button class="btn-primary" onclick="calc()">Calculate</button>
   </div>
@@ -216,6 +224,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     </a>
   </div>
 </section>
+<section class="decision-evidence"><h2>Treat the stub as a record layout</h2><p>A generated stub should reconcile gross pay, hours, rates, taxes, deductions, employer items, net pay, year-to-date balances, and the pay-period dates to the payroll register. State-required notices and deduction labels vary. Do not use a browser-generated document to invent payroll history or replace records from the actual payroll system.</p></section>
 </main>
 <footer>
   <div class="footer-inner">

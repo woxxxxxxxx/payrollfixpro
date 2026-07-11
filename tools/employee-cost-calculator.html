@@ -89,8 +89,16 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 #btt:hover{background:var(--primary-dark,#0e7490);transform:translateY(-2px)}
 @media print{header,footer,.ad-slot,.ad-top,.ad-middle,.ad-bottom,.form-card,.tool-hero,.breadcrumb,.seo-section,.faq-section,.related-section,.affiliate-section,.download-row,#btt{display:none!important}body{background:#fff!important}main{padding:0!important}.result-card,#output,#result{display:block!important;box-shadow:none!important;border:none!important;padding:0!important}}
 </style>
+<meta property="og:title" content="Employee Total Cost Calculator - Free Calculator | PayrollFixPro">
+<meta property="og:description" content="Calculate the true cost of an employee including salary, taxes, benefits, insurance, and overhead for hiring budgets.">
+<meta property="og:url" content="https://payrollfixpro.com/tools/employee-cost-calculator.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>.portfolio-skip-link{position:fixed;left:12px;top:12px;z-index:10000;padding:.65rem .9rem;background:#111827;color:#fff;border-radius:4px;transform:translateY(-160%)}.portfolio-skip-link:focus{transform:none}</style>
+<style>.decision-evidence{margin:2rem 0;padding:1.35rem;border:1px solid #bfd3ee;background:#f3f8ff;border-radius:6px}.decision-evidence h2{font-size:1.3rem;margin:0 0 .65rem}.decision-evidence p{line-height:1.75;margin:0}</style>
 </head>
 <body>
+<a class="portfolio-skip-link" href="#main-content">Skip to main content</a>
 <header>
   <div class="header-inner">
     <a href="/" class="logo"><img src="/logo.svg" alt="PayrollFixPro" height="38"></a>
@@ -104,7 +112,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
   <div style="display:inline-block;width:100%;max-width:468px;height:60px;border:1px dashed #ccc;background:#fafafa;line-height:60px;text-align:center;color:#aaa;font-size:12px;letter-spacing:1px;">ADVERTISEMENT</div>
 </div>
-<main>
+<main id="main-content">
   <div class="tool-hero">
     <h1>Employee Total Cost Calculator</h1>
     <p>Calculate fully-loaded employee cost including all overhead.</p>
@@ -112,12 +120,12 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
   <div class="form-card">
     <h2>Enter Employee Cost Information</h2>
     <div class="form-grid">
-<div class="field"><label>Employee Annual Salary ($)</label><input id="salary" type="number" value="60000" step="1000" min="0"></div>
-<div class="field"><label>Number of Employees</label><input id="headcount" type="number" value="1" step="1" min="1"></div>
-<div class="field"><label>Employer Health Insurance ($/employee/yr)</label><input id="health" type="number" value="6000" step="500" min="0"></div>
-<div class="field"><label>Employer 401(k) Match (%)</label><input id="match" type="number" value="4" step="0.5" min="0" max="100"></div>
-<div class="field"><label>State SUTA Rate (%)</label><input id="suta" type="number" value="2.7" step="0.1" min="0" max="20"></div>
-<div class="field"><label>Other Benefits per Employee ($/yr)</label><input id="other" type="number" value="1500" step="100" min="0"></div>
+<div class="field"><label>Employee Annual Salary ($)</label><input id="salary" type="number" value="60000" step="1000" min="0" aria-label="Salary"></div>
+<div class="field"><label>Number of Employees</label><input id="headcount" type="number" value="1" step="1" min="1" aria-label="Headcount"></div>
+<div class="field"><label>Employer Health Insurance ($/employee/yr)</label><input id="health" type="number" value="6000" step="500" min="0" aria-label="Health"></div>
+<div class="field"><label>Employer 401(k) Match (%)</label><input id="match" type="number" value="4" step="0.5" min="0" max="100" aria-label="Match"></div>
+<div class="field"><label>State SUTA Rate (%)</label><input id="suta" type="number" value="2.7" step="0.1" min="0" max="20" aria-label="Suta"></div>
+<div class="field"><label>Other Benefits per Employee ($/yr)</label><input id="other" type="number" value="1500" step="100" min="0" aria-label="Other"></div>
     </div>
     <button class="btn-primary" onclick="calc()">Calculate Total Employee Cost</button>
   </div>
@@ -208,6 +216,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     </a>
   </div>
 </section>
+<section class="decision-evidence"><h2>Build a complete employer-cost scenario</h2><p>Base pay is only the starting point. Add employer payroll taxes, workers compensation, health benefits, retirement contributions, paid leave, recruiting, equipment, and any location-specific assessments as separate assumptions. Use a low, expected, and high scenario because benefit enrollment and tax treatment vary by employee and jurisdiction.</p></section>
 </main>
 <footer>
   <div class="footer-inner">
