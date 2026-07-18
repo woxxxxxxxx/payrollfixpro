@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="robots" content="noindex, follow">
+  <meta name="robots" content="index, follow">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLWJ8VEN8D"></script>
 <script>
@@ -15,8 +15,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/assets/css/tool-modules.css">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<title>Singapore Salary Calculator - Free Calculator | PayrollFixPro</title>
-<meta name="description" content="Calculate Singapore salary after CPF contributions and income tax. See employer and employee CPF rates in SGD.">
+<title>Singapore Salary Calculator 2026: CPF &amp; Take-Home Pay</title>
+<meta name="description" content="Estimate Singapore take-home pay in 2026 using current employee CPF rates, the S$8,000 monthly CPF ceiling and IRAS resident tax bands.">
 <link rel="canonical" href="https://payrollfixpro.com/tools/singapore-salary-calculator.html">
 <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#0f766e;--primary-dark:#0d6460;--primary-light:#f0fdfa;--primary-dim:rgba(15,118,110,.08);--bg:#f8fafc;--bg2:#fff;--text:#1e293b;--text2:#475569;--text3:#94a3b8;--border:#e2e8f0;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 6px rgba(0,0,0,.04)}
@@ -62,6 +62,9 @@ main{max-width:860px;margin:0 auto;padding:24px 20px 60px;width:100%;flex:1}
 .seo-section h2{font-size:1.1rem;font-weight:700;margin-bottom:12px}
 .seo-section h3{font-size:.95rem;font-weight:700;margin:18px 0 8px;color:var(--text)}
 .seo-section p{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:10px}
+.assumption-note{margin-top:14px;padding:14px 16px;border-left:4px solid var(--primary);background:var(--primary-light);font-size:13px;color:var(--text2)}
+.source-list{padding-left:20px;color:var(--text2);font-size:14px;line-height:1.8}
+.source-list a{color:var(--primary);text-decoration:underline}
 .faq-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
 .faq-section h2{font-size:1.1rem;font-weight:700;margin-bottom:16px}
 .faq-item{border-bottom:1px solid var(--border);padding:14px 0}
@@ -106,53 +109,58 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 </div>
 <main>
   <div class="tool-hero">
-    <h1>Singapore Salary Calculator</h1>
-    <p>Estimate Singapore take-home pay after CPF and taxes.</p>
+    <h1>Singapore Salary Calculator 2026</h1>
+    <p>Estimate annual and monthly take-home pay after employee CPF and Singapore income tax. Updated for rules effective 1 January 2026.</p>
   </div>
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
 <div class="field"><label>Annual Gross Salary (SGD)</label><input id="salary" type="number" value="80000" step="1000" min="0"></div>
-<div class="field"><label>Filing / Residency Status</label><select id="status"><option value="single">Single / Individual</option><option value="married">Married / Joint</option></select></div>
-<div class="field"><label>CPF Contribution Rate</label><select id="cpf"><option value="0.20">Age �?5 (20%)</option><option value="0.15">Age 56-60 (15%)</option><option value="0.105">Age 61-65 (10.5%)</option><option value="0.075">Age 66-70 (7.5%)</option><option value="0.05">Age >70 (5%)</option></select></div>
+<div class="field"><label for="status">Tax Residency</label><select id="status"><option value="resident">Singapore tax resident</option><option value="nonresident">Non-resident employee</option></select></div>
+<div class="field"><label for="cpf">Employee Age / CPF Rate</label><select id="cpf"><option value="0.20">55 and below (20%)</option><option value="0.18">Above 55 to 60 (18%)</option><option value="0.125">Above 60 to 65 (12.5%)</option><option value="0.075">Above 65 to 70 (7.5%)</option><option value="0.05">Above 70 (5%)</option><option value="0">CPF does not apply (0%)</option></select></div>
     </div>
-    <button class="btn-primary" onclick="calc()">Calculate Singapore Tax</button>
+    <button class="btn-primary" onclick="calc()">Calculate Take-Home Pay</button>
+    <p class="assumption-note">Assumes salary is paid evenly over 12 months with no annual bonus, benefits-in-kind or tax reliefs other than estimated mandatory employee CPF. First- and second-year PR graduated CPF rates are not modelled.</p>
   </div>
   <div class="result-card" id="result">
     <h2>Singapore Take-Home Estimate</h2>
     <div class="result-grid">
 <div class="result-item"><div class="result-label">Gross Salary</div><div class="result-value" id="r-gross">&mdash; </div></div>
 <div class="result-item"><div class="result-label">Income Tax</div><div class="result-value" id="r-tax" style="color:#dc2626">&mdash; </div></div>
-<div class="result-item"><div class="result-label">Social Contributions</div><div class="result-value" id="r-social" style="color:#dc2626">&mdash; </div></div>
+<div class="result-item"><div class="result-label">Employee CPF</div><div class="result-value" id="r-social" style="color:#dc2626">&mdash; </div></div>
 <div class="result-item"><div class="result-label">Annual Take-Home</div><div class="result-value" id="r-annual">&mdash; </div></div>
 <div class="result-item"><div class="result-label">Monthly Take-Home</div><div class="result-value" id="r-monthly">&mdash; </div></div>
-<div class="result-item"><div class="result-label">Effective Tax Rate</div><div class="result-value" id="r-rate">&mdash; </div></div>
+<div class="result-item"><div class="result-label">Total Deduction Rate</div><div class="result-value" id="r-rate">&mdash; </div></div>
     </div>
   </div>
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
   <div style="display:inline-block;width:100%;max-width:468px;height:60px;border:1px dashed #ccc;background:#fafafa;line-height:60px;text-align:center;color:#aaa;font-size:12px;letter-spacing:1px;">ADVERTISEMENT</div>
 </div>
   <div class="seo-section">
-<h2>About Singapore Salary Calculator</h2>
-<p>The <strong>Singapore Salary Calculator</strong> on PayrollFixPro is a free, easy-to-use online tool designed to help employees, HR professionals, small business owners, and freelancers estimate salary calculation figures without complicated spreadsheets or expensive software.</p>
-<p>Whether you are a full-time salaried employee trying to understand your paycheck, a contractor estimating quarterly taxes, or an HR manager running payroll for a small team, this calculator provides an immediate planning estimate based only on the inputs and formulas shown on this page.</p>
-<h3>How to Use This Calculator</h3>
-<p>Enter the required values in the form above &mdash; such as your gross pay, pay period, filing status, or hourly wage. Click <strong>Calculate</strong> to instantly see a detailed breakdown of your results. The calculation is designed to run in your browser. Avoid entering names, account numbers, or other identifying information.</p>
-<h3>Why Accurate Salary Calculation Calculations Matter</h3>
-<p>Incorrect payroll and salary calculations can lead to underpaid employees, IRS penalties, incorrect W-2 filings, and costly compliance issues. Use the result as a reasonableness check, not as a payroll filing or compliance determination.</p>
-<p>Tax thresholds and payroll rules can change, and not every calculator on this site models every deduction or jurisdiction. Review the formula shown, verify current agency guidance, and cross-check material payroll decisions with a qualified payroll or tax professional.</p>
-<h3>Who Should Use the Singapore Salary Calculator</h3>
-<p>This tool is ideal for: <strong>employees</strong> who want to cross-check paycheck inputs; <strong>job seekers</strong> comparing salary offers; <strong>HR professionals</strong> preparing payroll summaries; <strong>freelancers and contractors</strong> estimating tax obligations; and <strong>small business owners</strong> managing employee compensation. It works for hourly, salaried, and contract workers across all industries.</p>
-<p>PayrollFixPro offers 100+ free payroll calculators covering every aspect of compensation &mdash; from basic salary conversion to advanced tax modeling. Bookmark this page and return whenever you need a quick planning estimate.</p>
+<h2>How the 2026 Singapore Salary Estimate Works</h2>
+<p>Enter annual gross salary, tax residency and the applicable employee CPF age band. The calculator estimates CPF-applicable Ordinary Wages, employee CPF, individual income tax and take-home pay in Singapore dollars.</p>
+<p>For an annual salary of S$72,000 paid evenly over 12 months, monthly gross salary is S$6,000. For a CPF-applicable employee aged 55 or below, the calculator estimates employee CPF at 20% of CPF-applicable wages before estimating resident income tax and take-home pay.</p>
+<h3>CPF Assumptions Used</h3>
+<p>From 1 January 2026, the Ordinary Wage ceiling is S$8,000 per month and the CPF annual salary ceiling remains S$102,000. Because this version accepts regular annual salary and assumes no bonus, CPF-applicable wages are capped at S$96,000 per year. The employee rates used are 20%, 18%, 12.5%, 7.5% and 5% across the official 2026 age bands.</p>
+<h3>Income Tax Assumptions</h3>
+<p>Resident tax is estimated using IRAS rates from YA 2024 onwards, including the 23% band above S$500,000 and 24% band above S$1,000,000. Employee CPF is treated as an estimated relief. Earned income relief, spouse or child reliefs, donations, SRS, rebates, benefits-in-kind and other income are not included.</p>
+<p>For a non-resident employee, employment income is estimated at the higher of 15% of gross income or the resident progressive-rate calculation. Tax residency depends on facts such as days worked or stayed in Singapore; selecting a status here does not determine legal residency.</p>
+<h3>Official Sources and Last Review</h3>
+<ul class="source-list">
+  <li><a href="https://www.cpf.gov.sg/service/article/what-are-the-changes-to-the-cpf-contribution-rates-for-senior-workers-from-1-january-2026" target="_blank" rel="noopener">CPF Board: contribution rates from 1 January 2026</a></li>
+  <li><a href="https://www.cpf.gov.sg/member/infohub/news/cpf-related-announcements/budget-highlights-2023" target="_blank" rel="noopener">CPF Board: monthly and annual salary ceilings</a></li>
+  <li><a href="https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/tax-residency-and-tax-rates/individual-income-tax-rates" target="_blank" rel="noopener">IRAS: individual income tax rates</a></li>
+</ul>
+<p><strong>Last reviewed:</strong> 18 July 2026. This is a planning estimate, not a payroll filing or tax assessment.</p>
   </div>
 
 <div class="faq-section">
     <h2>Frequently Asked Questions</h2>
-<div class="faq-item"><div class="faq-q">How does the Singapore Salary Calculator handle different pay frequencies?</div><div class="faq-a">The calculator automatically converts between annual, monthly, biweekly, weekly, and hourly rates using standard pay period multipliers (26 biweekly periods, 52 weekly periods per year). Results update instantly when you change any input.</div></div>
-<div class="faq-item"><div class="faq-q">How accurate are the calculations?</div><div class="faq-a">Accuracy depends on the inputs and scope stated on each page. Many tools provide simplified estimates and do not replace current IRS, state, local, or professional payroll guidance.</div></div>
+<div class="faq-item"><div class="faq-q">What employee CPF rates does the calculator use for 2026?</div><div class="faq-a">For monthly wages above S$750, it uses 20% for age 55 and below, 18% above 55 to 60, 12.5% above 60 to 65, 7.5% above 65 to 70, and 5% above 70. Graduated lower-wage and first- or second-year PR rates are outside this calculator's scope.</div></div>
+<div class="faq-item"><div class="faq-q">Does the calculator include the S$8,000 CPF salary ceiling?</div><div class="faq-a">Yes. Regular monthly wages are capped at S$8,000 for CPF, equivalent to S$96,000 across 12 equal salary payments. Bonuses and other Additional Wages are not included in this version.</div></div>
+<div class="faq-item"><div class="faq-q">How accurate is the income tax estimate?</div><div class="faq-a">It uses current IRAS progressive rates but cannot model every relief, rebate, benefit, donation or other source of income. Use the IRAS calculator or a qualified Singapore tax professional for a filing decision.</div></div>
 <div class="faq-item"><div class="faq-q">Does my data get saved or shared?</div><div class="faq-a">No. All calculations run entirely in your browser using JavaScript. We never collect, store, or transmit any personal or financial data you enter.</div></div>
-<div class="faq-item"><div class="faq-q">Can I use this calculator for multiple employees?</div><div class="faq-a">Yes. Simply clear the form and enter new values for each employee or pay period. The calculator resets instantly.</div></div>
-<div class="faq-item"><div class="faq-q">What is the difference between gross and net pay?</div><div class="faq-a">Gross pay is your total earnings before any deductions. Net pay (take-home pay) is what remains after federal income tax, state tax, FICA (Social Security and Medicare), and other deductions like 401k or health insurance are subtracted.</div></div>
+<div class="faq-item"><div class="faq-q">Does CPF apply to every employee working in Singapore?</div><div class="faq-a">No. CPF generally applies to Singapore citizens and permanent residents, with graduated rates possible for newer PRs. Foreign employees who are not permanent residents generally do not contribute CPF; select the 0% option for that estimate.</div></div>
 
   </div>
   <div class="related-section">
@@ -168,7 +176,8 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 <div style="text-align:center;padding:8px 0;margin:12px 0;">
   <div style="display:inline-block;width:100%;max-width:468px;height:60px;border:1px dashed #ccc;background:#fafafa;line-height:60px;text-align:center;color:#aaa;font-size:12px;letter-spacing:1px;">ADVERTISEMENT</div>
 </div>
-<!-- AFFILIATE_SECTION_START -->
+<!-- Affiliate cards stay inactive until tracked programme links are approved. -->
+<template id="pending-affiliate-cards">
 <style>
 .affiliate-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
 .affiliate-section h2{font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text)}
@@ -205,6 +214,7 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
     </a>
   </div>
 </section>
+</template>
 </main>
 <footer>
   <div class="footer-inner">
@@ -223,8 +233,8 @@ function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
 function fmtd(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function set(id,v){document.getElementById(id).textContent=v;}
 function calcSGTax(inc){
-  // Singapore 2024 resident tax rates
-  const br=[[20000,0],[10000,.02],[10000,.035],[40000,.07],[40000,.115],[40000,.15],[40000,.18],[40000,.19],[280000,.195],[Infinity,.22]];
+  // IRAS resident tax rates from YA 2024 onwards.
+  const br=[[20000,0],[10000,.02],[10000,.035],[40000,.07],[40000,.115],[40000,.15],[40000,.18],[40000,.19],[40000,.195],[40000,.20],[180000,.22],[500000,.23],[Infinity,.24]];
   let tax=0,prev=0;
   for(const[band,r]of br){const upper=prev+band;if(inc<=prev)break;tax+=(Math.min(inc,upper)-prev)*r;prev=upper;}
   return tax;
@@ -232,18 +242,22 @@ function calcSGTax(inc){
 function calc(){
   const salary=parseFloat(document.getElementById('salary').value)||0;
   const cpfRate=parseFloat(document.getElementById('cpf').value)||0;
-  // CPF capped at OW ceiling $102,000/yr
-  const cpfWages=Math.min(salary,102000);
+  // Regular salary is assumed to be paid evenly: S$8,000 OW ceiling x 12 months.
+  const cpfWages=Math.min(salary,96000);
   const cpf=cpfWages*cpfRate;
-  const tax=calcSGTax(salary);
+  const residentTax=calcSGTax(Math.max(0,salary-cpf));
+  const tax=document.getElementById('status').value==='nonresident'
+    ?Math.max(salary*.15,calcSGTax(salary))
+    :residentTax;
   const net=salary-tax-cpf;
   document.getElementById('r-gross').textContent='S$'+Math.round(salary).toLocaleString('en-US');
   document.getElementById('r-tax').textContent='S$'+Math.round(tax).toLocaleString('en-US');
-  document.getElementById('r-social').textContent='CPF: S$'+Math.round(cpf).toLocaleString('en-US');
+  document.getElementById('r-social').textContent='S$'+Math.round(cpf).toLocaleString('en-US');
   document.getElementById('r-annual').textContent='S$'+Math.round(net).toLocaleString('en-US');
   document.getElementById('r-monthly').textContent='S$'+Math.round(net/12).toLocaleString('en-US');
   set('r-rate',(salary>0?(tax+cpf)/salary*100:0).toFixed(1)+'%');
   document.getElementById('result').classList.add('show');
+  if(typeof gtag==='function')gtag('event','salary_calculation',{calculator:'singapore_salary_2026',tax_residency:document.getElementById('status').value,cpf_rate:cpfRate});
 }
 
 window.addEventListener('scroll',function(){var b=document.getElementById('btt');if(b)b.classList.toggle('show',window.scrollY>300);});
