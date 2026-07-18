@@ -95,7 +95,12 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <style>.portfolio-skip-link{position:fixed;left:12px;top:12px;z-index:10000;padding:.65rem .9rem;background:#111827;color:#fff;border-radius:4px;transform:translateY(-160%)}.portfolio-skip-link:focus{transform:none}</style>
-</head>
+<style id="footer-layout-fix">
+.footer-inner{display:grid!important;grid-template-columns:minmax(0,1fr) auto;column-gap:32px;row-gap:18px;align-items:center}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px 20px}
+.footer-copy{grid-column:1 / -1;width:auto!important;padding-top:16px;border-top:1px solid rgba(148,163,184,.22);line-height:1.55}
+@media(max-width:640px){.footer-inner{grid-template-columns:1fr;gap:14px}.footer-links{justify-content:flex-start}.footer-copy{padding-top:14px}}
+</style></head>
 <body>
 <a class="portfolio-skip-link" href="#main-content">Skip to main content</a>
 <header>
@@ -218,10 +223,10 @@ footer{background:var(--text);color:#94a3b8;padding:28px 20px}
       <a href="/about.html">About</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/sitemap.xml">Sitemap</a>
+      <a href="/editorial-policy.html">Editorial Policy</a>
     </div>
     <div class="footer-copy">© 2026 PayrollFixPro. All rights reserved. For informational purposes only &mdash; consult a tax professional for advice.</div>
-  </div>
-<p class="editorial-policy-link"><a href="../editorial-policy.html">Editorial Policy</a></p></footer>
+  </div></footer>
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8679;</button>
 <script>
 function fmt(n){return'$'+Math.round(n).toLocaleString('en-US');}
