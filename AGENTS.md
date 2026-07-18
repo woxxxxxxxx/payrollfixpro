@@ -16,6 +16,7 @@
 - 无特殊配置
 
 ## 关键修复历史
+- 2026-07-18: Footer layout updated site-wide. Editorial Policy now sits with the footer navigation links; GitHub Pages deployment verified live.
 - severance-pay-calculator：state's 单引号转义破坏 JS 字符串 → 已修复
 - Calculate Tax 404 修正
 
