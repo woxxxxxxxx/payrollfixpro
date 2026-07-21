@@ -145,10 +145,10 @@ window.calcExecCompensation = function (baseSalary, targetBonusPct, actualPerfor
   <div class="form-card">
     <h2>Enter Your Information</h2>
     <div class="form-grid">
-<div class="field"><label>Annual Base Salary ($)</label><input id="salary" type="number" value="95000" step="1000" min="0"></div>
-<div class="field"><label>Annual Bonus ($)</label><input id="bonus" type="number" value="0" step="500" min="0"></div>
-<div class="field"><label>Taxable Equity / LTI Income Recognized This Year ($)</label><input id="extra" type="number" value="50000" step="5000" min="0"></div>
-<div class="field"><label>Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
+<div class="field"><label for="salary">Annual Base Salary ($)</label><input id="salary" type="number" value="95000" step="1000" min="0"></div>
+<div class="field"><label for="bonus">Annual Bonus ($)</label><input id="bonus" type="number" value="0" step="500" min="0"></div>
+<div class="field"><label for="extra">Taxable Equity / LTI Income Recognized This Year ($)</label><input id="extra" type="number" value="50000" step="5000" min="0"></div>
+<div class="field"><label for="status">Filing Status</label><select id="status"><option value="single">Single</option><option value="mfj">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
     </div>
     <button class="btn-primary" onclick="calc()">Calculate Executive Compensation</button>
   </div>
